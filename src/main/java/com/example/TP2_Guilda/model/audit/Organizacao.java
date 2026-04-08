@@ -1,0 +1,51 @@
+package com.example.TP2_Guilda.model.audit;
+
+import com.example.TP2_Guilda.model.aventura.Aventureiro;
+import jakarta.persistence.*;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Entity
+@Table(name = "organizacoes", schema = "audit")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Organizacao {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "nome", unique = true, nullable = false, length = 120)
+    private String nome;
+
+    @Column(name = "ativo", nullable = false)
+    private boolean ativo = true;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime criadoEm = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "organizacao")
+    private List<ApiKeys> apiKeys;
+
+    @OneToMany(mappedBy = "organizacao")
+    private List<AuditEntry> auditEntries;
+
+    @OneToMany(mappedBy = "organizacao")
+    private List<Usuario> usuarios;
+
+    @OneToMany(mappedBy = "organizacao")
+    private List<Role> roles;
+
+    @OneToMany(mappedBy = "organizacao")
+    private List<Aventureiro> aventureiros;
+
+}
