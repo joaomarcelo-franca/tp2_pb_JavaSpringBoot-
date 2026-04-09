@@ -1,10 +1,10 @@
-package com.example.TP2_Guilda.DTO;
+package com.example.TP2_Guilda.DTO.Aventureiro;
 
+import com.example.TP2_Guilda.DTO.Missao.MissaoResponseResumoDTO;
 import com.example.TP2_Guilda.Enum.Classe;
 import com.example.TP2_Guilda.model.audit.Organizacao;
 import com.example.TP2_Guilda.model.audit.Usuario;
 import com.example.TP2_Guilda.model.aventura.Companheiro;
-import com.example.TP2_Guilda.model.aventura.Missao;
 import com.example.TP2_Guilda.model.aventura.Participacao;
 
 import java.time.LocalDateTime;
@@ -15,12 +15,11 @@ public record AventureiroResponseDTO(
          Classe classe,
          Integer nivel,
          Boolean ativo,
-         Organizacao organizacao,
-         Usuario usuario,
+         OrganizacaoResumoDTO organizacao,
          Companheiro companheiro,
          LocalDateTime criadoEm,
          LocalDateTime atualizadoEm,
          Integer totalMissoes,
-         Participacao participacao
+         MissaoResponseResumoDTO ultimaMissao
 ) {
 }

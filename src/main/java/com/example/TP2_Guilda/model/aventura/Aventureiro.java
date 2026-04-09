@@ -15,6 +15,7 @@ import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter@Setter
@@ -27,11 +28,11 @@ import java.time.LocalDateTime;
         attributeNodes = {
                 @NamedAttributeNode("organizacao"),
                 @NamedAttributeNode("usuario"),
-                @NamedAttributeNode("companheiro")
+                @NamedAttributeNode("companheiro"),
+                @NamedAttributeNode("participacoes")
         }
 )
 @AllArgsConstructor
-@NoArgsConstructor
 public class Aventureiro {
 
     @Id
@@ -40,7 +41,6 @@ public class Aventureiro {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizacao_id", nullable = false)
-    @NotNull
     private Organizacao organizacao;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -51,6 +51,10 @@ public class Aventureiro {
     @JoinColumn(name = "companheiro_id", unique = true)
     private Companheiro companheiro;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "aventureiro")
+    private List<Participacao> participacoes;
+
+
     @Column(length = 120, nullable = false)
     private String nome;
 
@@ -59,18 +63,31 @@ public class Aventureiro {
     private Classe classe;
 
     @Column(nullable = false)
-    @Min(value = 1)
     private Integer nivel;
 
     @Column(nullable = false)
     private Boolean ativo;
 
     @Column(nullable = false)
-    private LocalDateTime criadoEm = LocalDateTime.now();
+    private LocalDateTime criadoEm;
 
     @Column(nullable = false)
-    @UpdateTimestamp
     private LocalDateTime atualizadoEm;
 
+    protected  Aventureiro() {
+    }
+
+    public Aventureiro(Organizacao organizacao, Usuario usuario, String nome, Classe classe, Integer nivel) {
+        this.organizacao = organizacao;
+        this.usuario = usuario;
+        this.nome = nome;
+        this.classe = classe;
+        this.nivel = nivel;
+        this.ativo = true;
+        this.criadoEm = LocalDateTime.now();
+        this.atualizadoEm = LocalDateTime.now();
+    }
 
 }
+
+

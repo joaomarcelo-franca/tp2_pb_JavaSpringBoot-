@@ -1,6 +1,7 @@
 package com.example.TP2_Guilda.model.aventura;
 
 import com.example.TP2_Guilda.Enum.Especie;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -20,19 +21,27 @@ public class Companheiro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "companheiro")
     private Aventureiro aventureiro;
 
-
-    @NotNull@NotBlank
     @Column(length = 120, nullable = false)
     private String nome;
 
-    @NotNull
     @Column(nullable = false)
     private Especie especie;
 
     @Column(nullable = false)
-    @Min(value = 0)@Max(value = 100)
     private Integer lealdade;
+
+    public Companheiro(Aventureiro aventureiro, String nome, Especie especie, Integer lealdade) {
+        this.aventureiro = aventureiro;
+        this.nome = nome;
+        this.especie = especie;
+        this.lealdade = lealdade;
+    }
+
+    protected Companheiro() {
+
+    }
 }

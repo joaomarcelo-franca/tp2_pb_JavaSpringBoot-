@@ -1,37 +1,33 @@
 package com.example.TP2_Guilda.service;
 
 import com.example.TP2_Guilda.DTO.*;
+import com.example.TP2_Guilda.DTO.Aventureiro.*;
+import com.example.TP2_Guilda.DTO.Missao.MissaoResponseResumoDTO;
 import com.example.TP2_Guilda.Enum.Status;
-import com.example.TP2_Guilda.Repositorys.AventureiroRespository;
-import com.example.TP2_Guilda.Repositorys.ParticipacaoRepository;
-import com.example.TP2_Guilda.exceptions.EntityNotFoundException;
-import com.example.TP2_Guilda.exceptions.HeadersInvalidosException;
+import com.example.TP2_Guilda.Repositorys.*;
+import com.example.TP2_Guilda.model.audit.Organizacao;
+import com.example.TP2_Guilda.model.audit.Usuario;
 import com.example.TP2_Guilda.model.aventura.Aventureiro;
 import com.example.TP2_Guilda.model.aventura.Companheiro;
 import com.example.TP2_Guilda.model.aventura.Participacao;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class GuildaService {
-    private AventureiroRespository aventureiroRespository;
-    private ParticipacaoRepository  participacaoRepository;
-
-
-
-//    //        TODO Ranking de Participação
-    public List<RakingAventureiroDTO> gerarRanking(LocalDateTime dataInicio, Status status){
-        return aventureiroRespository.rankingPorFiltro(dataInicio , status);
-    }
+    private final  UsuarioRepository usuarioRepository;
+    private final CompanheiroRepository companheiroRepository;
+    private final OrganizacaoRepository organizacaoRepository;
+    private final AventureiroRespository aventureiroRespository;
+    private final ParticipacaoRepository  participacaoRepository;
 
 
 //    TODO Listagem de Aventureiros com Filtros
@@ -50,18 +46,35 @@ public class GuildaService {
         return aventureiroRespository.findByNomeContainingIgnoreCase(nome, pageable);
     }
 
+
+
+
 //    TODO Visualização Completa do Aventureiro
     public AventureiroResponseDTO listarAventureiroCompletoPorId(Long id) {
 
-//        Tratar Optional
-        Aventureiro aventureiro = aventureiroRespository.findById(id).orElse(null);
 
-        Integer participacoes = participacaoRepository.countByAventureiroId(id);
+        Aventureiro aventureiro = aventureiroRespository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Aventureiro nao foi encontrado"));
 
-//        Tratar Optional
-        Participacao ultimaParticipacao = participacaoRepository
-                .findTop1ByAventureiroIdOrderByCriadoEmDesc(id)
+        Integer participacoes = aventureiro.getParticipacoes().size();
+//
+        Participacao ultimaParticipacao = participacaoRepository.findFirstByAventureiroIdOrderByCriadoEmDesc(id)
                 .orElse(null);
+
+        MissaoResponseResumoDTO ultimaMissao = ultimaParticipacao != null ? new MissaoResponseResumoDTO(
+                ultimaParticipacao.getMissao().getId(),
+                ultimaParticipacao.getMissao().getTitulo(),
+                ultimaParticipacao.getMissao().getStatus(),
+                ultimaParticipacao.getMissao().getNivelDePerigo(),
+                ultimaParticipacao.getMissao().getCriandoEm()
+        ) : null;
+
+        OrganizacaoResumoDTO organizacaoResumoDTO = new OrganizacaoResumoDTO(
+                aventureiro.getOrganizacao().getId(),
+                aventureiro.getOrganizacao().getNome(),
+                aventureiro.getOrganizacao().isAtivo(),
+                aventureiro.getCriadoEm()
+        );
 
         return new AventureiroResponseDTO(
                 aventureiro.getId(),
@@ -69,20 +82,68 @@ public class GuildaService {
                 aventureiro.getClasse(),
                 aventureiro.getNivel(),
                 aventureiro.getAtivo(),
-                aventureiro.getOrganizacao(),
-                aventureiro.getUsuario(),
-                aventureiro.getCompanheiro(),
+                organizacaoResumoDTO,
+                aventureiro.getCompanheiro(),  // Fazer um DTO
                 aventureiro.getCriadoEm(),
                 aventureiro.getAtualizadoEm(),
                 participacoes,
-                ultimaParticipacao
+                ultimaMissao
         );
-
-
 
     }
 
+    //    //        TODO Ranking de Participação
+    public List<RakingAventureiroDTO> gerarRanking(LocalDateTime dataInicio, Status status){
+        return aventureiroRespository.rankingPorFiltro(dataInicio , status);
+    }
 
+
+//    SALVAR
+    public AventureiroResumoDTO registrar(AventureiroCreateDTO dto){
+        Organizacao organizacao = organizacaoRepository.findById(dto.organizacaoId())
+                .orElseThrow(() -> new RuntimeException("Organizacao nao encontrada"));
+
+        Usuario usuario = usuarioRepository.findById(dto.userId())
+                .orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+
+        Aventureiro aventureiro = new Aventureiro(
+                organizacao,
+                usuario,
+                dto.nome(),
+                dto.classe(),
+                dto.nivel()
+        );
+
+        usuario.getAventureiros().add(aventureiro);
+        organizacao.getAventureiros().add(aventureiro);
+        aventureiroRespository.save(aventureiro);
+
+        return new AventureiroResumoDTO(
+                aventureiro.getId(),
+                aventureiro.getNome(),
+                aventureiro.getClasse(),
+                aventureiro.getNivel(),
+                aventureiro.getAtivo()
+        );
+    }
+
+//  Registrar companheiro
+    public Void registrarCompanheiro(Long id, CompanheiroCreateDTO dto){
+        Aventureiro aventureiro = aventureiroRespository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Companheiro nao encontrado"));
+
+        Companheiro companheiro = new Companheiro(
+                aventureiro,
+                dto.nome(),
+                dto.especie(),
+                dto.lealdade()
+        );
+
+        aventureiro.setCompanheiro(companheiro);
+        companheiroRepository.save(companheiro);
+
+        return null;
+    }
 
 
 

@@ -16,7 +16,7 @@ public class ApiKeys {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "organizacao_id", nullable = false)
     private Organizacao organizacao;
 

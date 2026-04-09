@@ -22,11 +22,11 @@ public class Participacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "aventureiro_id", nullable = false)
     private Aventureiro aventureiro;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "missao_id", nullable = false)
     private Missao missao;
 

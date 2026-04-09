@@ -1,15 +1,12 @@
-package com.example.TP2_Guilda.DTO;
+package com.example.TP2_Guilda.DTO.Missao;
 
 import com.example.TP2_Guilda.Enum.NivelDePerigo;
 import com.example.TP2_Guilda.Enum.Status;
 
 import java.time.LocalDateTime;
 
-public record MissaoResponseResumoDTO(
-        Long id,
-        String titulo,
+public record MissaoRequestDTO (
         Status status,
-        NivelDePerigo nivelDePerigo,
+        NivelDePerigo perigo,
         LocalDateTime criadoEm
-) {
-}
+){}

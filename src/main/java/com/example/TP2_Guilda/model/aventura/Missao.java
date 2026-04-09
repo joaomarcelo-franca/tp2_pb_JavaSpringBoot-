@@ -42,13 +42,12 @@ public class Missao {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizacao_id", nullable = false)
-    @NotNull
     private Organizacao organizacao;
 
     @OneToMany(mappedBy = "missao", orphanRemoval = true)
     List<Participacao> participacoes;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     private String titulo;
 
     @Enumerated(EnumType.STRING)
@@ -60,5 +59,15 @@ public class Missao {
     private Status status;
 
     @Column(nullable = false)
-    private LocalDateTime criandoEm = LocalDateTime.now();
+    private LocalDateTime criandoEm;
+
+    public Missao(String titulo, Organizacao organizacao, NivelDePerigo nivelDePerigo, Status status) {
+        this.titulo = titulo;
+        this.organizacao = organizacao;
+        this.nivelDePerigo = nivelDePerigo;
+        this.status = status;
+        this.criandoEm = LocalDateTime.now();
+    }
+
+    protected Missao() {}
 }

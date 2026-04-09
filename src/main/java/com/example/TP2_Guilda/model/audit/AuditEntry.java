@@ -52,15 +52,15 @@ public class AuditEntry {
     @Column(name = "sucess")
     private String sucess;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "actor_api_key_id", nullable = false)
     private ApiKeys apiKey;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "actor_user_id", nullable = false)
     private Usuario usuario;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "audit_id", nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "organizacao_id", nullable = false)
     private Organizacao organizacao;
 }

@@ -1,7 +1,7 @@
 package com.example.TP2_Guilda.Repositorys;
 
-import com.example.TP2_Guilda.DTO.MissaoResponseMetricasDTO;
-import com.example.TP2_Guilda.DTO.MissaoResponseResumoDTO;
+import com.example.TP2_Guilda.DTO.Missao.MissaoResponseMetricasDTO;
+import com.example.TP2_Guilda.DTO.Missao.MissaoResponseResumoDTO;
 import com.example.TP2_Guilda.Enum.NivelDePerigo;
 import com.example.TP2_Guilda.Enum.Status;
 import com.example.TP2_Guilda.model.aventura.Missao;
@@ -19,17 +19,18 @@ import java.util.Optional;
 public interface MissaoRepository extends JpaRepository<Missao, Long> {
 
     @Query("""
-    select new com.example.TP2_Guilda.DTO.MissaoResponseResumoDTO(
+    select new com.example.TP2_Guilda.DTO.Missao.MissaoResponseResumoDTO(
         m.id, m.titulo, m.status, m.nivelDePerigo, m.criandoEm
         )
     from Missao m
         where (:status IS NULL or m.status = :status)
-            and (:nivel is null or m.nivelDePerigo = :nivel)
+            and (:nivelDePerigo is null or m.nivelDePerigo = :nivelDePerigo)
             and (:data is null or m.criandoEm <= :data)
+                order by m.id desc
     """)
     Page<MissaoResponseResumoDTO> buscarComFiltroPaginado(
             @Param("status") Status status,
-            @Param("nivel")NivelDePerigo nivelDePerigo,
+            @Param("nivelDePerigo")NivelDePerigo nivelDePerigo,
             @Param("data")LocalDateTime criadoEm,
             Pageable pageable
             );
@@ -43,8 +44,8 @@ public interface MissaoRepository extends JpaRepository<Missao, Long> {
 
 
     @Query("""
-        select new com.example.TP2_Guilda.DTO.MissaoResponseMetricasDTO(
-            m.titulo, m.status, m.nivelDePerigo, COUNT(DISTINCT p.id), COALESCE(sum(p.recompensaOuro), 0)
+        select new com.example.TP2_Guilda.DTO.Missao.MissaoResponseMetricasDTO(
+            m.titulo, m.status, m.nivelDePerigo, COUNT(p.id), COALESCE(sum(p.recompensaOuro), 0)
             )
         from Missao m
         left join m.participacoes p

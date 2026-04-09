@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface ParticipacaoRepository extends JpaRepository<Participacao, Long> {
 
     @EntityGraph(attributePaths = {"missao"})
-    Optional<Participacao> findTop1ByAventureiroIdOrderByCriadoEmDesc(Long id);
+    Optional<Participacao> findFirstByAventureiroIdOrderByCriadoEmDesc(Long id);
 
     Integer countByAventureiroId(Long id);
 }

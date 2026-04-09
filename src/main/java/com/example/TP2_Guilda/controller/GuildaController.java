@@ -20,6 +20,8 @@ import java.util.List;
 public class GuildaController {
     private final GuildaService service;
 
+
+
 //    @GetMapping()
 //    public ResponseEntity<List<AventureiroResponseDTO>> getAll(){
 //        return ResponseEntity.ok(service.listar());

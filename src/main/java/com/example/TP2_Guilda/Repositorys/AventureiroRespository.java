@@ -1,6 +1,6 @@
 package com.example.TP2_Guilda.Repositorys;
 
-import com.example.TP2_Guilda.DTO.AventureiroResumoDTO;
+import com.example.TP2_Guilda.DTO.Aventureiro.AventureiroResumoDTO;
 import com.example.TP2_Guilda.DTO.RakingAventureiroDTO;
 import com.example.TP2_Guilda.Enum.Classe;
 import com.example.TP2_Guilda.Enum.Status;
@@ -19,7 +19,7 @@ import java.util.Optional;
 public interface AventureiroRespository extends JpaRepository<Aventureiro, Long> {
 
     @Query("""
-        select new com.example.TP2_Guilda.DTO.AventureiroResumoDTO(
+        select new com.example.TP2_Guilda.DTO.Aventureiro.AventureiroResumoDTO(
             a.id, a.nome, a.classe, a.nivel, a.ativo
         )
         from Aventureiro a
@@ -50,6 +50,7 @@ public interface AventureiroRespository extends JpaRepository<Aventureiro, Long>
         where (:status is null or m.status = :status)
         and (:dataInicio is null or p.criadoEm <= :dataInicio)
         group by a.id, a.nome
+        order by COALESCE(SUM(p.recompensaOuro), 0L) desc
 
 """)
     List<RakingAventureiroDTO> rankingPorFiltro(

@@ -1,6 +1,7 @@
 package com.example.TP2_Guilda.model.audit;
 
 import com.example.TP2_Guilda.model.aventura.Aventureiro;
+import com.example.TP2_Guilda.model.aventura.Missao;
 import jakarta.persistence.*;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -47,5 +48,8 @@ public class Organizacao {
 
     @OneToMany(mappedBy = "organizacao")
     private List<Aventureiro> aventureiros;
+
+    @OneToMany(mappedBy = "organizacao")
+    private List<Missao> missoes;
 
 }
