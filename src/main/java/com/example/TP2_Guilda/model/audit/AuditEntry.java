@@ -35,32 +35,32 @@ public class AuditEntry {
     private String entityId;
 
     @Column(name = "occurred_at", nullable = false)
-    private LocalDateTime occurredAt = LocalDateTime.now();
+    private LocalDateTime occurredAt;
 
     @Column(name = "ip")
     private String ip;
 
-    @Column(name = "user_agent")
+    @Column(name = "user_agent", columnDefinition = "inet", nullable = false)
     private String userAgent;
 
-    @Column(name = "diff")
+    @Column(name = "diff", columnDefinition = "jsonb")
     private String diff;
 
-    @Column(name = "metadata")
+    @Column(name = "metadata", columnDefinition = "jsonb")
     private String metadata;
 
     @Column(name = "sucess")
     private String sucess;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "actor_api_key_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "actor_api_key_id")
     private ApiKeys apiKey;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "actor_user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "actor_user_id")
     private Usuario usuario;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizacao_id", nullable = false)
     private Organizacao organizacao;
 }

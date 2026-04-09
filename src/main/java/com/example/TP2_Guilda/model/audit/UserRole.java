@@ -37,6 +37,6 @@ public class UserRole {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @Column(name = "granted_at", nullable = false)
-    private LocalDateTime grantedAt = LocalDateTime.now();
+    @Column(name = "granted_at")
+    private LocalDateTime grantedAt;
 }

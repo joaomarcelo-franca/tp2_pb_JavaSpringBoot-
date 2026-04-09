@@ -2,10 +2,7 @@ package com.example.TP2_Guilda.model.audit;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,7 +18,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Role {
 
     @Id
@@ -39,7 +35,7 @@ public class Role {
     private String descricao;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime criadoEm = LocalDateTime.now();
+    private LocalDateTime criadoEm;
 
     @ManyToMany
     @JoinTable(
@@ -51,5 +47,7 @@ public class Role {
     private List<Permission> permissions;
 
     @OneToMany(mappedBy = "role")
-    private List<UserRole> userRoles = new ArrayList<>();
+    private List<UserRole> userRoles;
+
+
 }

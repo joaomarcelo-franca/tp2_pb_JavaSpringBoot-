@@ -16,7 +16,7 @@ public class ApiKeys {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "organizacao_id", nullable = false)
     private Organizacao organizacao;
 
@@ -26,16 +26,16 @@ public class ApiKeys {
     @Column(name = "nome", nullable = false, length = 120)
     private String nome;
 
-    @Column(name = "key_hash", nullable = false, length = 255)
+    @Column(name = "key_hash", nullable = false)
     private String hashKey;
 
     @Column(name = "ativo", nullable = false)
-    private boolean ativo = true;
+    private boolean ativo;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime criadoEm = LocalDateTime.now();
+    private LocalDateTime criadoEm;
 
-    @Column(name = "last_used_at", nullable = false)
+    @Column(name = "last_used_at")
     private LocalDateTime ultimaVezUsadoEm;
 
 

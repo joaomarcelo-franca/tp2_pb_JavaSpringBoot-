@@ -29,10 +29,10 @@ public class Organizacao {
     private String nome;
 
     @Column(name = "ativo", nullable = false)
-    private boolean ativo = true;
+    private boolean ativo;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime criadoEm = LocalDateTime.now();
+    private LocalDateTime criadoEm;
 
     @OneToMany(mappedBy = "organizacao")
     private List<ApiKeys> apiKeys;

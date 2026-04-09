@@ -26,12 +26,14 @@ public class Usuario {
     @JoinColumn(name = "organizacao_id", nullable = false)
     private Organizacao organizacao;
 
-//    Olhar esse CascadeType
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserRole> userRoles = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuario")
     private List<Aventureiro>  aventureiros;
+
+    @OneToMany(mappedBy = "usuario")
+    private List<AuditEntry> auditEntries;
 
     @Column(name = "nome", length = 120, nullable = false)
     private String nome;
@@ -39,7 +41,7 @@ public class Usuario {
     @Column(name = "email", length = 180, nullable = false)
     private String email;
 
-    @Column(name = "senha_hash", length = 255, nullable = false)
+    @Column(name = "senha_hash", nullable = false)
     private String senhaHash;
 
     @Column(name = "status", length = 30, nullable = false)
@@ -49,10 +51,10 @@ public class Usuario {
     private LocalDateTime ultimoLoginEm;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime criadoEm = LocalDateTime.now();
+    private LocalDateTime criadoEm;
 
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime atualizadoEm = LocalDateTime.now();
+    private LocalDateTime atualizadoEm;
 
 
 //    HELPRS
