@@ -27,9 +27,6 @@ class Tp2GuildaApplicationTests {
 	@Autowired
 	private PermissionRepository permissionRepository;
 
-	@Autowired
-	private UserRoleRepository userRoleRepository;
-
 	@Transactional
 	@Test
 	void contextLoads() {

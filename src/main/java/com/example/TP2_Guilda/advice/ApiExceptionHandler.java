@@ -56,21 +56,6 @@ public class ApiExceptionHandler {
                 .body(erro);
     }
 
-//
-//    @ExceptionHandler(HeadersInvalidosException.class)
-//    public ResponseEntity<ErrorResponseDTO> handleHeadersInvalidos(HeadersInvalidosException ex) {
-//
-//        ErrorResponseDTO erro = new ErrorResponseDTO(
-//                "Solicitação inválida",
-//                ex.getErros()
-//        );
-//
-//        return ResponseEntity
-//                .badRequest()
-//                .body(erro);
-//    }
-//
-
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponseDTO> handleJsonInvalido(HttpMessageNotReadableException ex) {
 

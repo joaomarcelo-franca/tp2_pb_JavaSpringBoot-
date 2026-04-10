@@ -1,7 +1,7 @@
 package com.example.TP2_Guilda.Repositorys;
 
 import com.example.TP2_Guilda.DTO.Aventureiro.AventureiroResumoDTO;
-import com.example.TP2_Guilda.DTO.RakingAventureiroDTO;
+import com.example.TP2_Guilda.DTO.Aventureiro.RakingAventureiroDTO;
 import com.example.TP2_Guilda.Enum.Classe;
 import com.example.TP2_Guilda.Enum.Status;
 import com.example.TP2_Guilda.model.aventura.Aventureiro;
@@ -43,7 +43,7 @@ public interface AventureiroRespository extends JpaRepository<Aventureiro, Long>
 
 
     @Query("""
-        select new com.example.TP2_Guilda.DTO.RakingAventureiroDTO(
+        select new com.example.TP2_Guilda.DTO.Aventureiro.RakingAventureiroDTO(
             a.id, a.nome, COUNT(p.id), COALESCE(SUM(p.recompensaOuro), 0L), SUM(case when p.mvp = true then 1L else 0L end)
         )
         from Participacao p

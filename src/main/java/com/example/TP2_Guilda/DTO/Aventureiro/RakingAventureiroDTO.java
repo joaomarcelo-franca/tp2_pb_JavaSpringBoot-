@@ -1,4 +1,4 @@
-package com.example.TP2_Guilda.DTO;
+package com.example.TP2_Guilda.DTO.Aventureiro;
 
 public record RakingAventureiroDTO(
         Long id,
