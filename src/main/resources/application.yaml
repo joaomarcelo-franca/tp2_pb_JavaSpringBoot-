@@ -2,8 +2,8 @@ spring:
   application:
     name: TP1_Guilda
   datasource:
-    url: jdbc:postgresql://localhost:5432/aventura_db
-    username: joao
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
     password: 1234
   jpa:
     hibernate:
@@ -14,3 +14,6 @@ spring:
       hibernate.format_sql: true
   main:
       allow-bean-definition-overriding: true
+
+  elasticsearch:
+    uris: http://localhost:9200

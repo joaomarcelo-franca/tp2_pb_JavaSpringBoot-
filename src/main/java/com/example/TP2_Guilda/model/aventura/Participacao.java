@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(
        name = "participacoes_missao",
+        schema = "aventura",
         uniqueConstraints = @UniqueConstraint(columnNames = {"missao_id", "aventureiro_id"})
 )
 public class Participacao {

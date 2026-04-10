@@ -32,7 +32,8 @@ import java.util.List;
 )
 @Entity
 @Table(
-        name = "missoes"
+        name = "missoes",
+        schema = "aventura"
 )
 public class Missao {
 
