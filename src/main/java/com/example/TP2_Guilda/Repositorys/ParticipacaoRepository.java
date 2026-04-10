@@ -1,6 +1,5 @@
 package com.example.TP2_Guilda.Repositorys;
 
-import com.example.TP2_Guilda.model.aventura.Missao;
 import com.example.TP2_Guilda.model.aventura.Participacao;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;

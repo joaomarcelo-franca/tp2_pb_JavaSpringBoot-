@@ -12,6 +12,7 @@ import com.example.TP2_Guilda.model.audit.Usuario;
 import com.example.TP2_Guilda.model.aventura.Aventureiro;
 import com.example.TP2_Guilda.model.aventura.Companheiro;
 import com.example.TP2_Guilda.model.aventura.Participacao;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,14 +24,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class GuildaService {
-    private final  UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
     private final CompanheiroRepository companheiroRepository;
     private final OrganizacaoRepository organizacaoRepository;
     private final AventureiroRespository aventureiroRespository;
-    private final ParticipacaoRepository  participacaoRepository;
+    private final ParticipacaoRepository participacaoRepository;
 
 
-//    TODO Listagem de Aventureiros com Filtros
+    //    TODO Listagem de Aventureiros com Filtros
     public Page<AventureiroResumoDTO> listarAventureiroComFiltro(AventureiroFiltroRequestDTO filtro, Pageable pageable) {
 
         return aventureiroRespository.buscarComFiltroPaginado(
@@ -41,12 +42,12 @@ public class GuildaService {
         );
     }
 
-//    TODO Buscar por nome
+    //    TODO Buscar por nome
     public Page<AventureiroResumoDTO> listarAventureiroPorNome(String nome, Pageable pageable) {
         return aventureiroRespository.findByNomeContainingIgnoreCase(nome, pageable);
     }
 
-//    TODO Visualização Completa do Aventureiro
+    //    TODO Visualização Completa do Aventureiro
     public AventureiroResponseDTO listarAventureiroCompletoPorId(Long id) {
 
 
@@ -97,12 +98,12 @@ public class GuildaService {
     }
 
     //      TODO Ranking de Participação
-    public List<RakingAventureiroDTO> gerarRanking(LocalDateTime dataInicio, Status status){
-        return aventureiroRespository.rankingPorFiltro(dataInicio , status);
+    public List<RakingAventureiroDTO> gerarRanking(LocalDateTime dataInicio, Status status) {
+        return aventureiroRespository.rankingPorFiltro(dataInicio, status);
     }
 
-//    SALVAR
-    public AventureiroResumoDTO registrar(AventureiroCreateDTO dto){
+    //    SALVAR
+    public AventureiroResumoDTO registrar(AventureiroCreateDTO dto) {
         Organizacao organizacao = organizacaoRepository.findById(dto.organizacaoId())
                 .orElseThrow(() -> new EntityNotFoundException("Organizacao não encontrada"));
 
@@ -130,8 +131,8 @@ public class GuildaService {
         );
     }
 
-//  Registrar companheiro
-    public Void registrarCompanheiro(Long id, CompanheiroCreateDTO dto){
+    //  Registrar companheiro
+    public Void registrarCompanheiro(Long id, CompanheiroCreateDTO dto) {
         Aventureiro aventureiro = aventureiroRespository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Aventureiro não encontrado"));
 
@@ -147,5 +148,55 @@ public class GuildaService {
 
         return null;
     }
+
+
+    //    Encerrar Vinculo com a guilda 204
+    @Transactional
+    public void encerrarVinculoComAGuilda(Long id) {
+        Aventureiro aventureiro = aventureiroRespository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Aventureiro não encontrado"));
+        aventureiro.setAtivo(false);
+    }
+
+//    Recrutar novamente 204
+    @Transactional
+    public void recrutarNovamente(Long id) {
+        Aventureiro aventureiro = aventureiroRespository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Aventureiro não encontrado"));
+        aventureiro.setAtivo(true);
+
+    }
+
+//    Remover Companheiro 204
+    @Transactional
+    public void removerCompanheiro(Long id){
+        Aventureiro aventureiro = aventureiroRespository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Aventureiro não encontrado"));
+        aventureiro.setCompanheiro(null);
+    }
+
+//    Atualizar dados do aventureiro 204
+    @Transactional
+    public void atualizarAventureiro(Long id, AventureiroUpdateDTO dto) {
+        Aventureiro aventureiro = aventureiroRespository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Aventureiro não encontrado"));
+
+        if (dto.nome() != null) {
+            aventureiro.setNome(dto.nome());
+        }
+
+        if (dto.nivel() != null) {
+            aventureiro.setNivel(dto.nivel());
+        }
+
+        if (dto.classe() != null) {
+            aventureiro.setClasse(dto.classe());
+        }
+
+
+    }
+
+
+
 
 }

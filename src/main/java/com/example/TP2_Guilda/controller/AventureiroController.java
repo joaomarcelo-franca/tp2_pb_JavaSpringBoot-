@@ -1,11 +1,7 @@
 package com.example.TP2_Guilda.controller;
 
-import com.example.TP2_Guilda.DTO.Aventureiro.AventureiroCreateDTO;
-import com.example.TP2_Guilda.DTO.Aventureiro.AventureiroFiltroRequestDTO;
-import com.example.TP2_Guilda.DTO.Aventureiro.AventureiroResponseDTO;
-import com.example.TP2_Guilda.DTO.Aventureiro.AventureiroResumoDTO;
+import com.example.TP2_Guilda.DTO.Aventureiro.*;
 import com.example.TP2_Guilda.DTO.companheiro.CompanheiroCreateDTO;
-import com.example.TP2_Guilda.DTO.Aventureiro.RakingAventureiroDTO;
 import com.example.TP2_Guilda.Enum.Status;
 import com.example.TP2_Guilda.service.GuildaService;
 import jakarta.validation.Valid;
@@ -89,4 +85,30 @@ public class AventureiroController {
             return ResponseEntity.ok().body(guildaService.gerarRanking(data , status));
     };
 
+    @PatchMapping("{id}/encerrar")
+    public ResponseEntity<Void> encerrar(@PathVariable Long id){
+        guildaService.encerrarVinculoComAGuilda(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("{id}/recrutar")
+    public ResponseEntity<Void> recrutar(@PathVariable Long id){
+        guildaService.recrutarNovamente(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("{id}/remover-companheiro")
+    public ResponseEntity<Void> removerCompanheiro(@PathVariable Long id){
+        guildaService.removerCompanheiro(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> atualizar(
+            @PathVariable Long id,
+            AventureiroUpdateDTO dto
+    ) {
+        guildaService.atualizarAventureiro(id, dto);
+        return ResponseEntity.noContent().build();
+    }
 }

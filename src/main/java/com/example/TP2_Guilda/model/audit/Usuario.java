@@ -4,7 +4,6 @@ import com.example.TP2_Guilda.model.aventura.Aventureiro;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.*;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

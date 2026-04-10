@@ -4,7 +4,6 @@ import com.example.TP2_Guilda.Enum.NivelDePerigo;
 import com.example.TP2_Guilda.Enum.Status;
 import com.example.TP2_Guilda.model.audit.Organizacao;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.NamedSubgraph;

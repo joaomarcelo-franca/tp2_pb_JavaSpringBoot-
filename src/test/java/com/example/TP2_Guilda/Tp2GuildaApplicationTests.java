@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,19 +37,23 @@ class Tp2GuildaApplicationTests {
 
 		Organizacao organizacao = new Organizacao();
 		organizacao.setNome("Organizacao");
+		organizacao.setCriadoEm(LocalDateTime.now());
 		organizacaoRepository.save(organizacao);
 
 		Usuario usuario = new Usuario();
 		usuario.setNome("Usuario");
 		usuario.setOrganizacao(organizacao);
-		usuario.setStatus("Ativo");
+		usuario.setStatus("ATIVO");
 		usuario.setEmail("joao@g.com");
 		usuario.setSenhaHash("123456");
+		usuario.setCriadoEm(LocalDateTime.now());
+		usuario.setAtualizadoEm(LocalDateTime.now());
 		usuarioRepository.save(usuario);
 
 		Role role = new Role();
 		role.setNome("Role");
 		role.setOrganizacao(organizacao);
+		role.setCriadoEm(LocalDateTime.now());
 		roleRepository.save(role);
 
 		Permission permission = new Permission();

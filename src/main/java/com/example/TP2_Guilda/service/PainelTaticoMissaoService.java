@@ -1,6 +1,6 @@
 package com.example.TP2_Guilda.service;
 
-import com.example.TP2_Guilda.Repositorys.MissaoRepository;
+
 import com.example.TP2_Guilda.Repositorys.PainelTaticoMissaoRepository;
 import com.example.TP2_Guilda.model.operacoes.PainelTaticoMissao;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 import java.util.Comparator;
 import java.util.List;
 

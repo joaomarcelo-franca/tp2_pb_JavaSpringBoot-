@@ -4,15 +4,12 @@ import com.example.TP2_Guilda.Enum.Classe;
 import com.example.TP2_Guilda.model.audit.Organizacao;
 import com.example.TP2_Guilda.model.audit.Usuario;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
 import lombok.Setter;
-import org.hibernate.annotations.UpdateTimestamp;
+
 
 import java.time.LocalDateTime;
 import java.util.List;

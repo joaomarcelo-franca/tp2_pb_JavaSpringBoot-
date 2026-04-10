@@ -1,7 +1,6 @@
 package com.example.TP2_Guilda.model.elastic;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

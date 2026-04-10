@@ -1,6 +1,5 @@
 package com.example.TP2_Guilda.controller;
 
-import com.example.TP2_Guilda.DTO.Missao.MissaoResponseResumoDTO;
 import com.example.TP2_Guilda.model.operacoes.PainelTaticoMissao;
 import com.example.TP2_Guilda.service.PainelTaticoMissaoService;
 import lombok.AllArgsConstructor;
