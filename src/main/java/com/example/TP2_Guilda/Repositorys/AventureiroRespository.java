@@ -40,6 +40,8 @@ public interface AventureiroRespository extends JpaRepository<Aventureiro, Long>
     @EntityGraph(value = "Aventureiro.completo")
     Optional<Aventureiro> findById(Long id);
 
+
+
     @Query("""
         select new com.example.TP2_Guilda.DTO.RakingAventureiroDTO(
             a.id, a.nome, COUNT(p.id), COALESCE(SUM(p.recompensaOuro), 0L), SUM(case when p.mvp = true then 1L else 0L end)
@@ -48,10 +50,9 @@ public interface AventureiroRespository extends JpaRepository<Aventureiro, Long>
         join p.aventureiro a
         join p.missao m
         where (:status is null or m.status = :status)
-        and (:dataInicio is null or p.criadoEm <= :dataInicio)
+        and (cast(:dataInicio as date) is null or p.criadoEm <= :dataInicio)
         group by a.id, a.nome
         order by COALESCE(SUM(p.recompensaOuro), 0L) desc
-
 """)
     List<RakingAventureiroDTO> rankingPorFiltro(
             @Param("dataInicio")LocalDateTime dataInicio,

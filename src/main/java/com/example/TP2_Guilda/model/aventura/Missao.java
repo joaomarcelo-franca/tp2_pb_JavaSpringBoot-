@@ -44,7 +44,7 @@ public class Missao {
     @JoinColumn(name = "organizacao_id", nullable = false)
     private Organizacao organizacao;
 
-    @OneToMany(mappedBy = "missao", orphanRemoval = true)
+    @OneToMany(mappedBy = "missao", orphanRemoval = true, cascade = CascadeType.ALL)
     List<Participacao> participacoes;
 
     @Column(nullable = false, length = 150)

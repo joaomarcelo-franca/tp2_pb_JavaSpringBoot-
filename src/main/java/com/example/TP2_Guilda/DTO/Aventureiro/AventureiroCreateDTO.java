@@ -8,19 +8,19 @@ import jakarta.validation.constraints.Positive;
 
 public record AventureiroCreateDTO(
 
-        @NotNull
+        @NotNull(message = "OrganizacaoID é obrigatório")
         Long organizacaoId,
 
-        @NotNull
+        @NotNull(message = "UserID é obrigatório")
         Long userId,
 
-        @NotBlank
+        @NotBlank(message = "Nome é obrigatório")
         String nome,
 
-        @NotNull
+        @NotNull(message = "Classe é obrigatória")
         Classe classe,
 
-        @Positive
+        @Positive(message = "nivel tem que ser maior que ZERO")
         Integer nivel
 
 ) {

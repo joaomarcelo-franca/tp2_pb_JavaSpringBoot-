@@ -5,6 +5,7 @@ import com.example.TP2_Guilda.DTO.Aventureiro.*;
 import com.example.TP2_Guilda.DTO.Missao.MissaoResponseResumoDTO;
 import com.example.TP2_Guilda.Enum.Status;
 import com.example.TP2_Guilda.Repositorys.*;
+import com.example.TP2_Guilda.exceptions.EntityNotFoundException;
 import com.example.TP2_Guilda.model.audit.Organizacao;
 import com.example.TP2_Guilda.model.audit.Usuario;
 import com.example.TP2_Guilda.model.aventura.Aventureiro;
@@ -46,15 +47,12 @@ public class GuildaService {
         return aventureiroRespository.findByNomeContainingIgnoreCase(nome, pageable);
     }
 
-
-
-
 //    TODO Visualização Completa do Aventureiro
     public AventureiroResponseDTO listarAventureiroCompletoPorId(Long id) {
 
 
         Aventureiro aventureiro = aventureiroRespository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Aventureiro nao foi encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Aventureiro não foi encontrado"));
 
         Integer participacoes = aventureiro.getParticipacoes().size();
 //
@@ -76,6 +74,13 @@ public class GuildaService {
                 aventureiro.getCriadoEm()
         );
 
+        CompanheiroResponseDTO companheiroResponseDTO = aventureiro.getCompanheiro() != null ? new CompanheiroResponseDTO(
+                aventureiro.getCompanheiro().getId(),
+                aventureiro.getCompanheiro().getNome(),
+                aventureiro.getCompanheiro().getEspecie(),
+                aventureiro.getCompanheiro().getLealdade()
+        ) : null;
+
         return new AventureiroResponseDTO(
                 aventureiro.getId(),
                 aventureiro.getNome(),
@@ -83,7 +88,7 @@ public class GuildaService {
                 aventureiro.getNivel(),
                 aventureiro.getAtivo(),
                 organizacaoResumoDTO,
-                aventureiro.getCompanheiro(),  // Fazer um DTO
+                companheiroResponseDTO,
                 aventureiro.getCriadoEm(),
                 aventureiro.getAtualizadoEm(),
                 participacoes,
@@ -92,19 +97,18 @@ public class GuildaService {
 
     }
 
-    //    //        TODO Ranking de Participação
+    //      TODO Ranking de Participação
     public List<RakingAventureiroDTO> gerarRanking(LocalDateTime dataInicio, Status status){
         return aventureiroRespository.rankingPorFiltro(dataInicio , status);
     }
 
-
 //    SALVAR
     public AventureiroResumoDTO registrar(AventureiroCreateDTO dto){
         Organizacao organizacao = organizacaoRepository.findById(dto.organizacaoId())
-                .orElseThrow(() -> new RuntimeException("Organizacao nao encontrada"));
+                .orElseThrow(() -> new EntityNotFoundException("Organizacao não encontrada"));
 
         Usuario usuario = usuarioRepository.findById(dto.userId())
-                .orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Usuario não encontrado"));
 
         Aventureiro aventureiro = new Aventureiro(
                 organizacao,
@@ -130,7 +134,7 @@ public class GuildaService {
 //  Registrar companheiro
     public Void registrarCompanheiro(Long id, CompanheiroCreateDTO dto){
         Aventureiro aventureiro = aventureiroRespository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Companheiro nao encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Aventureiro não encontrado"));
 
         Companheiro companheiro = new Companheiro(
                 aventureiro,

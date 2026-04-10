@@ -1,5 +1,6 @@
 package com.example.TP2_Guilda.DTO.Aventureiro;
 
+import com.example.TP2_Guilda.DTO.CompanheiroResponseDTO;
 import com.example.TP2_Guilda.DTO.Missao.MissaoResponseResumoDTO;
 import com.example.TP2_Guilda.Enum.Classe;
 import com.example.TP2_Guilda.model.audit.Organizacao;
@@ -16,7 +17,7 @@ public record AventureiroResponseDTO(
          Integer nivel,
          Boolean ativo,
          OrganizacaoResumoDTO organizacao,
-         Companheiro companheiro,
+         CompanheiroResponseDTO companheiro,
          LocalDateTime criadoEm,
          LocalDateTime atualizadoEm,
          Integer totalMissoes,

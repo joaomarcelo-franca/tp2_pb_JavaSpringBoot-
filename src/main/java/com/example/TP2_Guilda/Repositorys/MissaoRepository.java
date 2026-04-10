@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -25,13 +26,13 @@ public interface MissaoRepository extends JpaRepository<Missao, Long> {
     from Missao m
         where (:status IS NULL or m.status = :status)
             and (:nivelDePerigo is null or m.nivelDePerigo = :nivelDePerigo)
-            and (:data is null or m.criandoEm <= :data)
+            and (cast(:data as date) is null or m.criandoEm <= :data)
                 order by m.id desc
     """)
     Page<MissaoResponseResumoDTO> buscarComFiltroPaginado(
             @Param("status") Status status,
             @Param("nivelDePerigo")NivelDePerigo nivelDePerigo,
-            @Param("data")LocalDateTime criadoEm,
+            @Param("data") LocalDateTime criadoEm,
             Pageable pageable
             );
 
@@ -49,7 +50,7 @@ public interface MissaoRepository extends JpaRepository<Missao, Long> {
             )
         from Missao m
         left join m.participacoes p
-            where (:data is null or m.criandoEm <= :data)
+            where (cast(:data as date ) is null or m.criandoEm <= :data)
             group by m.titulo, m.status, m.nivelDePerigo
     """)
     List<MissaoResponseMetricasDTO> relatorioMetricaMissoes(

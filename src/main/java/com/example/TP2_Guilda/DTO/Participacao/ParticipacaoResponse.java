@@ -8,6 +8,6 @@ public record ParticipacaoResponse(
         AventureiroResumoDTO aventureiro,
         FuncaoMissao funcaoMissao,
         Long recompensaOuro,
-        Boolean mvp
+        boolean mvp
 ) {
 }

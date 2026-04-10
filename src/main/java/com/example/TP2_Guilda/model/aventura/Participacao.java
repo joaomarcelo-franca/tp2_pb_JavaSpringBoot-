@@ -42,6 +42,16 @@ public class Participacao {
     private boolean mvp;
 
     @Column(nullable = false)
-    private LocalDateTime criadoEm = LocalDateTime.now();
+    private LocalDateTime criadoEm;
 
+    protected Participacao() {}
+
+    public Participacao(Aventureiro aventureiro, Missao missao, Long recompensaOuro, FuncaoMissao funcaoMissao, boolean mvp) {
+        this.aventureiro = aventureiro;
+        this.missao = missao;
+        this.recompensaOuro = recompensaOuro;
+        this.funcaoMissao = funcaoMissao;
+        this.mvp = mvp;
+        this.criadoEm = LocalDateTime.now();
+    }
 }
