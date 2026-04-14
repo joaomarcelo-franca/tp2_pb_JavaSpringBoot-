@@ -2,6 +2,7 @@ package com.example.TP2_Guilda.controller;
 
 import com.example.TP2_Guilda.DTO.aventureiro.*;
 import com.example.TP2_Guilda.DTO.companheiro.CompanheiroCreateDTO;
+import com.example.TP2_Guilda.DTO.companheiro.CompanheiroResponseDTO;
 import com.example.TP2_Guilda.Enum.Status;
 import com.example.TP2_Guilda.service.GuildaService;
 import jakarta.validation.Valid;
@@ -31,7 +32,7 @@ public class AventureiroController {
     }
 
     @PostMapping("/{id}/companheiro")
-    public ResponseEntity<Void> registrarCompanheiro(@PathVariable Long id, @RequestBody @Valid CompanheiroCreateDTO dto){
+    public ResponseEntity<CompanheiroResponseDTO> registrarCompanheiro(@PathVariable Long id, @RequestBody @Valid CompanheiroCreateDTO dto){
         return ResponseEntity.status(HttpStatus.CREATED).body(guildaService.registrarCompanheiro(id, dto));
     }
 
@@ -106,7 +107,7 @@ public class AventureiroController {
     @PatchMapping("/{id}")
     public ResponseEntity<Void> atualizar(
             @PathVariable Long id,
-            AventureiroUpdateDTO dto
+            @Valid @RequestBody AventureiroUpdateDTO dto
     ) {
         guildaService.atualizarAventureiro(id, dto);
         return ResponseEntity.noContent().build();

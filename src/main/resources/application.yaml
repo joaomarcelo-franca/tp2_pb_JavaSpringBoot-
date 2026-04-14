@@ -7,10 +7,10 @@ spring:
     password: 1234
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   main:
-      allow-bean-definition-overriding: true
+    allow-bean-definition-overriding: true
 
   elasticsearch:
     uris: http://localhost:9200

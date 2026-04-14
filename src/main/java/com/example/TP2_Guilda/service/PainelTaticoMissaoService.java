@@ -37,5 +37,6 @@ public class PainelTaticoMissaoService {
     @CacheEvict(value = "topMissoes15dias", allEntries = true)
     public void limparCacheAutomaticamente() {
         System.out.println("Cache limpo!");
+        listarTop10Missoes15Dias();
     }
 }

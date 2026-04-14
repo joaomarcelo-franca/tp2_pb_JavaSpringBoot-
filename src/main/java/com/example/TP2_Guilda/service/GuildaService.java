@@ -132,7 +132,7 @@ public class GuildaService {
     }
 
     //  Registrar companheiro
-    public Void registrarCompanheiro(Long id, CompanheiroCreateDTO dto) {
+    public CompanheiroResponseDTO registrarCompanheiro(Long id, CompanheiroCreateDTO dto) {
         Aventureiro aventureiro = aventureiroRespository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Aventureiro não encontrado"));
 
@@ -146,7 +146,13 @@ public class GuildaService {
         aventureiro.setCompanheiro(companheiro);
         companheiroRepository.save(companheiro);
 
-        return null;
+        return new CompanheiroResponseDTO(
+                companheiro.getId(),
+                companheiro.getNome(),
+                companheiro.getEspecie(),
+                companheiro.getLealdade()
+        );
+
     }
 
 
