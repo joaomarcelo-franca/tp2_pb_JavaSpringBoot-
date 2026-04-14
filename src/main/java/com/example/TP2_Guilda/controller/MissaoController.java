@@ -1,8 +1,8 @@
 package com.example.TP2_Guilda.controller;
 
-import com.example.TP2_Guilda.DTO.Missao.*;
-import com.example.TP2_Guilda.DTO.Participacao.ParticipacaoRequestDTO;
-import com.example.TP2_Guilda.DTO.Participacao.ParticipacaoResponseComMissaoDTO;
+import com.example.TP2_Guilda.DTO.missao.*;
+import com.example.TP2_Guilda.DTO.participacao.ParticipacaoRequestDTO;
+import com.example.TP2_Guilda.DTO.participacao.ParticipacaoResponseComMissaoDTO;
 import com.example.TP2_Guilda.service.MissaoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

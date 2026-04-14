@@ -1,4 +1,4 @@
-package com.example.TP2_Guilda.DTO.Aventureiro;
+package com.example.TP2_Guilda.DTO.aventureiro;
 
 import lombok.Getter;
 import lombok.Setter;

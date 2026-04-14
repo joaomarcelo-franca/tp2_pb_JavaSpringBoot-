@@ -1,4 +1,4 @@
-package com.example.TP2_Guilda.DTO.Participacao;
+package com.example.TP2_Guilda.DTO.participacao;
 
 import com.example.TP2_Guilda.Enum.FuncaoMissao;
 import jakarta.validation.constraints.NotNull;

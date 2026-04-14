@@ -99,7 +99,6 @@ public List<ProdutoResponseDTO> buscarPorNomeFuzzy(String nome) throws IOExcepti
 }
 
 //    TODO Busca em múltiplos campos:
-//
 
     public List<ProdutoResponseDTO> buscarPorMultiCampos(String frase) throws IOException{
         SearchResponse<ProductDocument> search = elasticsearchClient.search(s -> s

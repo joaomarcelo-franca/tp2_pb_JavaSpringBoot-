@@ -1,11 +1,11 @@
 package com.example.TP2_Guilda.service;
 
-import com.example.TP2_Guilda.DTO.Aventureiro.AventureiroResumoDTO;
-import com.example.TP2_Guilda.DTO.Aventureiro.OrganizacaoResumoDTO;
-import com.example.TP2_Guilda.DTO.Missao.*;
-import com.example.TP2_Guilda.DTO.Participacao.ParticipacaoRequestDTO;
-import com.example.TP2_Guilda.DTO.Participacao.ParticipacaoResponse;
-import com.example.TP2_Guilda.DTO.Participacao.ParticipacaoResponseComMissaoDTO;
+import com.example.TP2_Guilda.DTO.aventureiro.AventureiroResumoDTO;
+import com.example.TP2_Guilda.DTO.aventureiro.OrganizacaoResumoDTO;
+import com.example.TP2_Guilda.DTO.missao.*;
+import com.example.TP2_Guilda.DTO.participacao.ParticipacaoRequestDTO;
+import com.example.TP2_Guilda.DTO.participacao.ParticipacaoResponse;
+import com.example.TP2_Guilda.DTO.participacao.ParticipacaoResponseComMissaoDTO;
 import com.example.TP2_Guilda.Enum.Status;
 import com.example.TP2_Guilda.Repositorys.AventureiroRespository;
 import com.example.TP2_Guilda.Repositorys.MissaoRepository;

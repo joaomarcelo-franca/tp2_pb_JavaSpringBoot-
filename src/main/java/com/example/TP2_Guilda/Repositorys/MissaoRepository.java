@@ -1,7 +1,7 @@
 package com.example.TP2_Guilda.Repositorys;
 
-import com.example.TP2_Guilda.DTO.Missao.MissaoResponseMetricasDTO;
-import com.example.TP2_Guilda.DTO.Missao.MissaoResponseResumoDTO;
+import com.example.TP2_Guilda.DTO.missao.MissaoResponseMetricasDTO;
+import com.example.TP2_Guilda.DTO.missao.MissaoResponseResumoDTO;
 import com.example.TP2_Guilda.Enum.NivelDePerigo;
 import com.example.TP2_Guilda.Enum.Status;
 import com.example.TP2_Guilda.model.aventura.Missao;
@@ -19,7 +19,7 @@ import java.util.Optional;
 public interface MissaoRepository extends JpaRepository<Missao, Long> {
 
     @Query("""
-    select new com.example.TP2_Guilda.DTO.Missao.MissaoResponseResumoDTO(
+    select new com.example.TP2_Guilda.DTO.missao.MissaoResponseResumoDTO(
         m.id, m.titulo, m.status, m.nivelDePerigo, m.criandoEm
         )
     from Missao m
@@ -44,7 +44,7 @@ public interface MissaoRepository extends JpaRepository<Missao, Long> {
 
 
     @Query("""
-        select new com.example.TP2_Guilda.DTO.Missao.MissaoResponseMetricasDTO(
+        select new com.example.TP2_Guilda.DTO.missao.MissaoResponseMetricasDTO(
             m.titulo, m.status, m.nivelDePerigo, COUNT(p.id), COALESCE(sum(p.recompensaOuro), 0)
             )
         from Missao m

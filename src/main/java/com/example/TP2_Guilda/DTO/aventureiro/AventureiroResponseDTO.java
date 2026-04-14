@@ -1,7 +1,7 @@
-package com.example.TP2_Guilda.DTO.Aventureiro;
+package com.example.TP2_Guilda.DTO.aventureiro;
 
 import com.example.TP2_Guilda.DTO.companheiro.CompanheiroResponseDTO;
-import com.example.TP2_Guilda.DTO.Missao.MissaoResponseResumoDTO;
+import com.example.TP2_Guilda.DTO.missao.MissaoResponseResumoDTO;
 import com.example.TP2_Guilda.Enum.Classe;
 
 import java.time.LocalDateTime;

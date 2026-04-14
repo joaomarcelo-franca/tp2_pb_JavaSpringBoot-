@@ -31,9 +31,9 @@ public class PainelTaticoMissaoService {
                 .toList();
     };
 
-//    Aqui habilito o Scheduled e defino 60000, o tempo esta em ms entao sera 1 minuto
+//    Aqui habilito o Scheduled e definido para todos os dias 00:00
 //    tambem e habilitado o CacheEvict para limpeza e e passado o valor da cache para identificar
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(cron = "0 0 0 * * *")
     @CacheEvict(value = "topMissoes15dias", allEntries = true)
     public void limparCacheAutomaticamente() {
         System.out.println("Cache limpo!");

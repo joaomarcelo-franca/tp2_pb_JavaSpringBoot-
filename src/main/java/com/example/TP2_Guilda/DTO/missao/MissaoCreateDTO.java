@@ -1,4 +1,4 @@
-package com.example.TP2_Guilda.DTO.Missao;
+package com.example.TP2_Guilda.DTO.missao;
 
 import com.example.TP2_Guilda.Enum.NivelDePerigo;
 import com.example.TP2_Guilda.Enum.Status;

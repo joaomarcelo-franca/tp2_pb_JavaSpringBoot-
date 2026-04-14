@@ -1,7 +1,7 @@
 package com.example.TP2_Guilda.service;
 
-import com.example.TP2_Guilda.DTO.Aventureiro.*;
-import com.example.TP2_Guilda.DTO.Missao.MissaoResponseResumoDTO;
+import com.example.TP2_Guilda.DTO.aventureiro.*;
+import com.example.TP2_Guilda.DTO.missao.MissaoResponseResumoDTO;
 import com.example.TP2_Guilda.DTO.companheiro.CompanheiroCreateDTO;
 import com.example.TP2_Guilda.DTO.companheiro.CompanheiroResponseDTO;
 import com.example.TP2_Guilda.Enum.Status;
