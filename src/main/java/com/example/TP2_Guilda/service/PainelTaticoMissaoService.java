@@ -1,7 +1,7 @@
 package com.example.TP2_Guilda.service;
 
 
-import com.example.TP2_Guilda.Repositorys.PainelTaticoMissaoRepository;
+import com.example.TP2_Guilda.repositorys.PainelTaticoMissaoRepository;
 import com.example.TP2_Guilda.model.operacoes.PainelTaticoMissao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;

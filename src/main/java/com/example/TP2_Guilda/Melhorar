@@ -1,0 +1,9 @@
+MissaoService.listarMissaoCompleta
+- Criar Mapper
+
+MissaoService.registrarParticipacao
+GuildaService.registrar/registrarCompanheiro
+- Criar Helpers para adicionar dos dois lados
+
+GuildaService.listarAventureiroCompletoPorId
+- Criar Mapper

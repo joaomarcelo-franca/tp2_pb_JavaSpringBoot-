@@ -1,8 +1,8 @@
 package com.example.TP2_Guilda.controller;
 
-import com.example.TP2_Guilda.DTO.aventureiro.*;
-import com.example.TP2_Guilda.DTO.companheiro.CompanheiroCreateDTO;
-import com.example.TP2_Guilda.DTO.companheiro.CompanheiroResponseDTO;
+import com.example.TP2_Guilda.dto.aventureiro.*;
+import com.example.TP2_Guilda.dto.companheiro.CompanheiroCreateDTO;
+import com.example.TP2_Guilda.dto.companheiro.CompanheiroResponseDTO;
 import com.example.TP2_Guilda.Enum.Status;
 import com.example.TP2_Guilda.service.GuildaService;
 import jakarta.validation.Valid;

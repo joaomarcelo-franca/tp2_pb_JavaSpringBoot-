@@ -1,8 +1,7 @@
 package com.example.TP2_Guilda.advice;
 
-import com.example.TP2_Guilda.DTO.ErrorResponseDTO;
-import com.example.TP2_Guilda.exceptions.EntityNotFoundException;
-import com.example.TP2_Guilda.exceptions.HeadersInvalidosException;
+import com.example.TP2_Guilda.dto.ErrorResponseDTO;
+import com.example.TP2_Guilda.exceptions.EntidadeNaoLocalizada;
 import com.example.TP2_Guilda.exceptions.RegrasDeNegocioException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +18,8 @@ import java.util.List;
 public class ApiExceptionHandler {
 
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handlerAventureiroNaoLocalizado(EntityNotFoundException ex){
+    @ExceptionHandler(EntidadeNaoLocalizada.class)
+    public ResponseEntity<ErrorResponseDTO> handlerAventureiroNaoLocalizado(EntidadeNaoLocalizada ex){
 
         ErrorResponseDTO erro = new ErrorResponseDTO("Recurso nao encontrado", List.of(ex.getMessage()));
         return ResponseEntity

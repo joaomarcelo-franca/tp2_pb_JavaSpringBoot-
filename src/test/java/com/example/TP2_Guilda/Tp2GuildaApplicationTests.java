@@ -1,7 +1,7 @@
 package com.example.TP2_Guilda;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.example.TP2_Guilda.Repositorys.*;
+import com.example.TP2_Guilda.repositorys.*;
 import com.example.TP2_Guilda.model.audit.*;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;

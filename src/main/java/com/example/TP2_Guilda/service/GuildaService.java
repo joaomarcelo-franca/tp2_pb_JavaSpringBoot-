@@ -1,12 +1,17 @@
 package com.example.TP2_Guilda.service;
 
-import com.example.TP2_Guilda.DTO.aventureiro.*;
-import com.example.TP2_Guilda.DTO.missao.MissaoResponseResumoDTO;
-import com.example.TP2_Guilda.DTO.companheiro.CompanheiroCreateDTO;
-import com.example.TP2_Guilda.DTO.companheiro.CompanheiroResponseDTO;
+import com.example.TP2_Guilda.dto.aventureiro.*;
+import com.example.TP2_Guilda.dto.missao.MissaoResponseResumoDTO;
+import com.example.TP2_Guilda.dto.companheiro.CompanheiroCreateDTO;
+import com.example.TP2_Guilda.dto.companheiro.CompanheiroResponseDTO;
 import com.example.TP2_Guilda.Enum.Status;
-import com.example.TP2_Guilda.Repositorys.*;
-import com.example.TP2_Guilda.exceptions.EntityNotFoundException;
+import com.example.TP2_Guilda.exceptions.AventureiroJaPossuiCompanheiroException;
+import com.example.TP2_Guilda.mappers.AventureiroMapper;
+import com.example.TP2_Guilda.mappers.CompanheiroMapper;
+import com.example.TP2_Guilda.mappers.MissaoMapper;
+import com.example.TP2_Guilda.mappers.OrganizationMapper;
+import com.example.TP2_Guilda.repositorys.*;
+import com.example.TP2_Guilda.exceptions.EntidadeNaoLocalizada;
 import com.example.TP2_Guilda.model.audit.Organizacao;
 import com.example.TP2_Guilda.model.audit.Usuario;
 import com.example.TP2_Guilda.model.aventura.Aventureiro;
@@ -52,48 +57,22 @@ public class GuildaService {
 
 
         Aventureiro aventureiro = aventureiroRespository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Aventureiro não foi encontrado"));
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Aventureiro não foi encontrado"));
 
         Integer participacoes = aventureiro.getParticipacoes().size();
-//
+
         Participacao ultimaParticipacao = participacaoRepository.findFirstByAventureiroIdOrderByCriadoEmDesc(id)
                 .orElse(null);
 
-        MissaoResponseResumoDTO ultimaMissao = ultimaParticipacao != null ? new MissaoResponseResumoDTO(
-                ultimaParticipacao.getMissao().getId(),
-                ultimaParticipacao.getMissao().getTitulo(),
-                ultimaParticipacao.getMissao().getStatus(),
-                ultimaParticipacao.getMissao().getNivelDePerigo(),
-                ultimaParticipacao.getMissao().getCriandoEm()
-        ) : null;
 
-        OrganizacaoResumoDTO organizacaoResumoDTO = new OrganizacaoResumoDTO(
-                aventureiro.getOrganizacao().getId(),
-                aventureiro.getOrganizacao().getNome(),
-                aventureiro.getOrganizacao().isAtivo(),
-                aventureiro.getCriadoEm()
-        );
 
-        CompanheiroResponseDTO companheiroResponseDTO = aventureiro.getCompanheiro() != null ? new CompanheiroResponseDTO(
-                aventureiro.getCompanheiro().getId(),
-                aventureiro.getCompanheiro().getNome(),
-                aventureiro.getCompanheiro().getEspecie(),
-                aventureiro.getCompanheiro().getLealdade()
-        ) : null;
+        MissaoResponseResumoDTO ultimaMissao = ultimaParticipacao != null ? MissaoMapper.toMissaoResponseResumoDTO(ultimaParticipacao.getMissao()) : null;
 
-        return new AventureiroResponseDTO(
-                aventureiro.getId(),
-                aventureiro.getNome(),
-                aventureiro.getClasse(),
-                aventureiro.getNivel(),
-                aventureiro.getAtivo(),
-                organizacaoResumoDTO,
-                companheiroResponseDTO,
-                aventureiro.getCriadoEm(),
-                aventureiro.getAtualizadoEm(),
-                participacoes,
-                ultimaMissao
-        );
+        OrganizacaoResumoDTO organizacaoResumoDTO = OrganizationMapper.toOrganizacaoResumoDTO(aventureiro.getOrganizacao(), aventureiro.getCriadoEm());
+
+        CompanheiroResponseDTO companheiroResponseDTO = aventureiro.getCompanheiro() != null ? CompanheiroMapper.toCompanheiroResponseDTO(aventureiro.getCompanheiro()) : null;
+
+        return AventureiroMapper.toAventureiroResponseDTO(aventureiro, organizacaoResumoDTO, companheiroResponseDTO, participacoes, ultimaMissao);
 
     }
 
@@ -105,10 +84,10 @@ public class GuildaService {
     //    SALVAR
     public AventureiroResumoDTO registrar(AventureiroCreateDTO dto) {
         Organizacao organizacao = organizacaoRepository.findById(dto.organizacaoId())
-                .orElseThrow(() -> new EntityNotFoundException("Organizacao não encontrada"));
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Organizacao não encontrada"));
 
         Usuario usuario = usuarioRepository.findById(dto.userId())
-                .orElseThrow(() -> new EntityNotFoundException("Usuario não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Usuario não encontrado"));
 
         Aventureiro aventureiro = new Aventureiro(
                 organizacao,
@@ -122,19 +101,18 @@ public class GuildaService {
         organizacao.getAventureiros().add(aventureiro);
         aventureiroRespository.save(aventureiro);
 
-        return new AventureiroResumoDTO(
-                aventureiro.getId(),
-                aventureiro.getNome(),
-                aventureiro.getClasse(),
-                aventureiro.getNivel(),
-                aventureiro.getAtivo()
-        );
+        return AventureiroMapper.toAventureiroResumoDTO(aventureiro);
+
     }
 
     //  Registrar companheiro
     public CompanheiroResponseDTO registrarCompanheiro(Long id, CompanheiroCreateDTO dto) {
         Aventureiro aventureiro = aventureiroRespository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Aventureiro não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Aventureiro não encontrado"));
+
+        if (aventureiro.getCompanheiro() != null) {
+            throw new AventureiroJaPossuiCompanheiroException("Aventureiro ja tem um companheiro assinado");
+        }
 
         Companheiro companheiro = new Companheiro(
                 aventureiro,
@@ -146,21 +124,15 @@ public class GuildaService {
         aventureiro.setCompanheiro(companheiro);
         companheiroRepository.save(companheiro);
 
-        return new CompanheiroResponseDTO(
-                companheiro.getId(),
-                companheiro.getNome(),
-                companheiro.getEspecie(),
-                companheiro.getLealdade()
-        );
+        return CompanheiroMapper.toCompanheiroResponseDTO(companheiro);
 
     }
-
 
     //    Encerrar Vinculo com a guilda 204
     @Transactional
     public void encerrarVinculoComAGuilda(Long id) {
         Aventureiro aventureiro = aventureiroRespository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Aventureiro não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Aventureiro não encontrado"));
         aventureiro.setAtivo(false);
     }
 
@@ -168,7 +140,7 @@ public class GuildaService {
     @Transactional
     public void recrutarNovamente(Long id) {
         Aventureiro aventureiro = aventureiroRespository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Aventureiro não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Aventureiro não encontrado"));
         aventureiro.setAtivo(true);
 
     }
@@ -177,7 +149,7 @@ public class GuildaService {
     @Transactional
     public void removerCompanheiro(Long id){
         Aventureiro aventureiro = aventureiroRespository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Aventureiro não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Aventureiro não encontrado"));
         aventureiro.setCompanheiro(null);
     }
 
@@ -185,7 +157,7 @@ public class GuildaService {
     @Transactional
     public void atualizarAventureiro(Long id, AventureiroUpdateDTO dto) {
         Aventureiro aventureiro = aventureiroRespository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Aventureiro não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Aventureiro não encontrado"));
 
         if (dto.nome() != null) {
             aventureiro.setNome(dto.nome());
@@ -201,8 +173,5 @@ public class GuildaService {
 
 
     }
-
-
-
 
 }

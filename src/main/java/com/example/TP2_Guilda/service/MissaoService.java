@@ -1,18 +1,22 @@
 package com.example.TP2_Guilda.service;
 
-import com.example.TP2_Guilda.DTO.aventureiro.AventureiroResumoDTO;
-import com.example.TP2_Guilda.DTO.aventureiro.OrganizacaoResumoDTO;
-import com.example.TP2_Guilda.DTO.missao.*;
-import com.example.TP2_Guilda.DTO.participacao.ParticipacaoRequestDTO;
-import com.example.TP2_Guilda.DTO.participacao.ParticipacaoResponse;
-import com.example.TP2_Guilda.DTO.participacao.ParticipacaoResponseComMissaoDTO;
+import com.example.TP2_Guilda.dto.aventureiro.AventureiroResumoDTO;
+import com.example.TP2_Guilda.dto.aventureiro.OrganizacaoResumoDTO;
+import com.example.TP2_Guilda.dto.missao.*;
+import com.example.TP2_Guilda.dto.participacao.ParticipacaoRequestDTO;
+import com.example.TP2_Guilda.dto.participacao.ParticipacaoResponse;
+import com.example.TP2_Guilda.dto.participacao.ParticipacaoResponseComMissaoDTO;
 import com.example.TP2_Guilda.Enum.Status;
-import com.example.TP2_Guilda.Repositorys.AventureiroRespository;
-import com.example.TP2_Guilda.Repositorys.MissaoRepository;
-import com.example.TP2_Guilda.Repositorys.OrganizacaoRepository;
-import com.example.TP2_Guilda.Repositorys.ParticipacaoRepository;
+import com.example.TP2_Guilda.mappers.AventureiroMapper;
+import com.example.TP2_Guilda.mappers.MissaoMapper;
+import com.example.TP2_Guilda.mappers.OrganizationMapper;
+import com.example.TP2_Guilda.mappers.ParticipacaoMapper;
+import com.example.TP2_Guilda.repositorys.AventureiroRespository;
+import com.example.TP2_Guilda.repositorys.MissaoRepository;
+import com.example.TP2_Guilda.repositorys.OrganizacaoRepository;
+import com.example.TP2_Guilda.repositorys.ParticipacaoRepository;
 import com.example.TP2_Guilda.exceptions.AventureiroInativoException;
-import com.example.TP2_Guilda.exceptions.EntityNotFoundException;
+import com.example.TP2_Guilda.exceptions.EntidadeNaoLocalizada;
 import com.example.TP2_Guilda.exceptions.MissaoNaoPlanejadaException;
 import com.example.TP2_Guilda.exceptions.OrganizacaoInvalida;
 import com.example.TP2_Guilda.model.audit.Organizacao;
@@ -36,7 +40,6 @@ public class MissaoService {
     private final AventureiroRespository aventureiroRespository;
     private final ParticipacaoRepository participacaoRepository;
 
-
     //    Salvar
     public MissaoResponseResumoDTO registrarMissao(MissaoCreateDTO dto, Long organizacaoId) {
         Organizacao organizacao = organizacaoRepository.findById(organizacaoId)
@@ -52,23 +55,17 @@ public class MissaoService {
         organizacao.getMissoes().add(missao);
         missaoRepository.save(missao);
 
-        return new MissaoResponseResumoDTO(
-                missao.getId(),
-                missao.getTitulo(),
-                missao.getStatus(),
-                missao.getNivelDePerigo(),
-                missao.getCriandoEm()
-        );
-
+        return MissaoMapper.toMissaoResponseResumoDTO(missao);
     }
 
     //    Salvar Participacao
     public ParticipacaoResponseComMissaoDTO registrarParticipacao(Long missaoId, Long aventureiroId, ParticipacaoRequestDTO dto) {
+
         Missao missao = missaoRepository.findById(missaoId)
-                .orElseThrow(() -> new EntityNotFoundException("Missao não encontrada"));
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Missao não encontrada"));
 
         Aventureiro aventureiro = aventureiroRespository.findById(aventureiroId)
-                .orElseThrow(() -> new EntityNotFoundException("Aventureiro não encontrado"));
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Aventureiro não encontrado"));
 
 
         if (aventureiro.getAtivo() == false){
@@ -91,36 +88,14 @@ public class MissaoService {
                 dto.mvp()
         );
 
-        AventureiroResumoDTO aventureiroResumoDTO = new AventureiroResumoDTO(
-                aventureiro.getId(),
-                aventureiro.getNome(),
-                aventureiro.getClasse(),
-                aventureiro.getNivel(),
-                aventureiro.getAtivo()
-        );
-
-        MissaoResponseResumoDTO missaoResumoDTO = new MissaoResponseResumoDTO(
-                missao.getId(),
-                missao.getTitulo(),
-                missao.getStatus(),
-                missao.getNivelDePerigo(),
-                missao.getCriandoEm()
-        );
-
         participacaoRepository.save(participacao);
+
+//      FIXME  Resumir esse abaixo com metodo
         missao.getParticipacoes().add(participacao);
         aventureiro.getParticipacoes().add(participacao);
 
-    return new ParticipacaoResponseComMissaoDTO(
-            participacao.getId(),
-            aventureiroResumoDTO,
-            missaoResumoDTO,
-            participacao.getRecompensaOuro(),
-            participacao.getFuncaoMissao(),
-            participacao.isMvp(),
-            participacao.getCriadoEm()
 
-    );
+        return ParticipacaoMapper.participacaoResponseComMissaoDTO2(participacao, aventureiro, missao);
     }
 
 
@@ -138,20 +113,13 @@ public class MissaoService {
 //    TODO Detalhamento de Missao
     public MissaoResponseDetalharDTO listarMissaoCompleta(Long id){
 
-        // TODO VALIDAR
         Missao missao = missaoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Missao não foi encontrado"));
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Missao não foi encontrado"));
 
         List<ParticipacaoResponse> participacoesDTO = missao.getParticipacoes()
                 .stream()
                 .map(participacao -> {
-                    AventureiroResumoDTO aventureiroResumoDTO = new AventureiroResumoDTO(
-                            participacao.getAventureiro().getId(),
-                            participacao.getAventureiro().getNome(),
-                            participacao.getAventureiro().getClasse(),
-                            participacao.getAventureiro().getNivel(),
-                            participacao.getAventureiro().getAtivo()
-                    );
+                    AventureiroResumoDTO aventureiroResumoDTO = AventureiroMapper.toAventureiroResumoDTO(participacao.getAventureiro());
                     return new ParticipacaoResponse(
                             participacao.getId(),
                             aventureiroResumoDTO,
@@ -162,21 +130,11 @@ public class MissaoService {
                 })
                 .toList();
 
-        OrganizacaoResumoDTO  organizacaoResumoDTO = new OrganizacaoResumoDTO(
-                missao.getOrganizacao().getId(),
-                missao.getOrganizacao().getNome(),
-                missao.getOrganizacao().isAtivo(),
-                missao.getOrganizacao().getCriadoEm()
-        );
 
-        return new MissaoResponseDetalharDTO(
-                missao.getId(),
-                organizacaoResumoDTO,
-                missao.getTitulo(),
-                missao.getStatus(),
-                missao.getCriandoEm(),
-                participacoesDTO
-        );
+        OrganizacaoResumoDTO  organizacaoResumoDTO = OrganizationMapper.toOrganizacaoResumoDTO(missao.getOrganizacao(), missao.getCriandoEm());
+
+        return MissaoMapper.toMissaoResponseDetalharDTO(missao, organizacaoResumoDTO, participacoesDTO);
+
 
     }
 

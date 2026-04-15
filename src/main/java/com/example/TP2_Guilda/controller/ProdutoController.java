@@ -1,6 +1,6 @@
 package com.example.TP2_Guilda.controller;
 
-import com.example.TP2_Guilda.DTO.elastic.ProdutoResponseDTO;
+import com.example.TP2_Guilda.dto.elastic.ProdutoResponseDTO;
 import com.example.TP2_Guilda.service.ProdutoService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

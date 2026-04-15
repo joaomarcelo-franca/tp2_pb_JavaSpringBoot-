@@ -5,7 +5,7 @@ import co.elastic.clients.elasticsearch._types.aggregations.Aggregate;
 import co.elastic.clients.elasticsearch._types.aggregations.AggregationRange;
 import co.elastic.clients.elasticsearch._types.aggregations.StringTermsBucket;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
-import com.example.TP2_Guilda.DTO.elastic.ProdutoResponseDTO;
+import com.example.TP2_Guilda.dto.elastic.ProdutoResponseDTO;
 import com.example.TP2_Guilda.model.elastic.ProductDocument;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -319,24 +319,6 @@ public List<ProdutoResponseDTO> buscarPorNomeFuzzy(String nome) throws IOExcepti
 
         return resultado;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
