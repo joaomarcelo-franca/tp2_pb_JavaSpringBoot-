@@ -22,7 +22,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Organizacao {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "organizacaoSequence")
+    @SequenceGenerator(name = "organizacaoSequence", sequenceName = "organizacoes_id_seq",  allocationSize = 1)
     private Long id;
 
     @Column(name = "nome", unique = true, nullable = false, length = 120)

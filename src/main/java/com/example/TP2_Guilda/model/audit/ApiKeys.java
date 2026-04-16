@@ -13,7 +13,8 @@ import java.util.List;
 @Getter @Setter@AllArgsConstructor@NoArgsConstructor
 public class ApiKeys {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "apiKeys_Sequence")
+    @SequenceGenerator(name = "apiKeys_Sequence", sequenceName = "api_keys_id_seq",  allocationSize = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -18,7 +18,8 @@ import java.time.LocalDateTime;
 public class AuditEntry {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "auditEntrySequence")
+    @SequenceGenerator(name = "auditEntrySequence", sequenceName = "audit_entries_id_seq",  allocationSize = 1)
     private Long id;
 
     @Column(name = "action", length = 30, nullable = false)

@@ -98,7 +98,12 @@ public class MissaoService {
         return ParticipacaoMapper.participacaoResponseComMissaoDTO2(participacao, aventureiro, missao);
     }
 
+    public void removerMissao(Long missaoId) {
+        missaoRepository.findById(missaoId)
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Missao nao foi localizada"));
 
+        missaoRepository.deleteById(missaoId);
+    }
 
 //    TODO Listagem de Missões
     public Page<MissaoResponseResumoDTO> listarMissaoPagiado(MissaoRequestDTO filtro, Pageable pageable, LocalDateTime criadoEm) {

@@ -18,7 +18,8 @@ uniqueConstraints = @UniqueConstraint(columnNames = {"organizacao_id", "email"})
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuarioSequence")
+    @SequenceGenerator(name = "usuarioSequence", sequenceName = "usuarios_id_seq",  allocationSize = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -63,4 +63,10 @@ public class MissaoController {
     ){
         return ResponseEntity.ok().body(missaoService.listarMissaoMetricas(date));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removerMissao(@PathVariable Long id){
+        missaoService.removerMissao(id);
+        return ResponseEntity.noContent().build();
+    }
 }

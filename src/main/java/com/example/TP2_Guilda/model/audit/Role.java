@@ -20,7 +20,8 @@ import java.util.List;
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roleSequence")
+    @SequenceGenerator(name = "roleSequence", sequenceName = "roles_id_seq",  allocationSize = 1)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

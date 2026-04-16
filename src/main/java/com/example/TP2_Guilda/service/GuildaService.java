@@ -104,6 +104,14 @@ public class GuildaService {
         return AventureiroMapper.toAventureiroResumoDTO(aventureiro);
 
     }
+//
+    public void removerAventureiro(Long id){
+        Aventureiro aventureiro = aventureiroRespository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Aventureiro nao encontrado"));
+
+        aventureiroRespository.delete(aventureiro);
+    }
+
 
     //  Registrar companheiro
     public CompanheiroResponseDTO registrarCompanheiro(Long id, CompanheiroCreateDTO dto) {
@@ -128,7 +136,6 @@ public class GuildaService {
 
     }
 
-    //    Encerrar Vinculo com a guilda 204
     @Transactional
     public void encerrarVinculoComAGuilda(Long id) {
         Aventureiro aventureiro = aventureiroRespository.findById(id)
@@ -136,7 +143,6 @@ public class GuildaService {
         aventureiro.setAtivo(false);
     }
 
-//    Recrutar novamente 204
     @Transactional
     public void recrutarNovamente(Long id) {
         Aventureiro aventureiro = aventureiroRespository.findById(id)
@@ -145,7 +151,6 @@ public class GuildaService {
 
     }
 
-//    Remover Companheiro 204
     @Transactional
     public void removerCompanheiro(Long id){
         Aventureiro aventureiro = aventureiroRespository.findById(id)
@@ -153,7 +158,6 @@ public class GuildaService {
         aventureiro.setCompanheiro(null);
     }
 
-//    Atualizar dados do aventureiro 204
     @Transactional
     public void atualizarAventureiro(Long id, AventureiroUpdateDTO dto) {
         Aventureiro aventureiro = aventureiroRespository.findById(id)
@@ -173,5 +177,7 @@ public class GuildaService {
 
 
     }
+
+
 
 }

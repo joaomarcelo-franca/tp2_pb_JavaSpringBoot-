@@ -4,6 +4,8 @@ import com.example.TP2_Guilda.dto.aventureiro.*;
 import com.example.TP2_Guilda.dto.companheiro.CompanheiroCreateDTO;
 import com.example.TP2_Guilda.dto.companheiro.CompanheiroResponseDTO;
 import com.example.TP2_Guilda.Enum.Status;
+import com.example.TP2_Guilda.model.aventura.Companheiro;
+import com.example.TP2_Guilda.repositorys.CompanheiroRepository;
 import com.example.TP2_Guilda.service.GuildaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import java.util.List;
 @Validated
 public class AventureiroController {
     private final GuildaService guildaService;
+    private final CompanheiroRepository companheiroRepository;
 
     @PostMapping
     public ResponseEntity<AventureiroResumoDTO> registrarAventureiro(@RequestBody @Valid AventureiroCreateDTO dto){
@@ -36,9 +39,10 @@ public class AventureiroController {
         return ResponseEntity.status(HttpStatus.CREATED).body(guildaService.registrarCompanheiro(id, dto));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AventureiroResponseDTO> getAventureiro(@PathVariable Long id){
-        return ResponseEntity.ok().body(guildaService.listarAventureiroCompletoPorId(id));
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> removerAventureiro(@PathVariable Long id){
+       guildaService.removerAventureiro(id);
+       return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/filtrado")
@@ -98,7 +102,7 @@ public class AventureiroController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("{id}/remover-companheiro")
+    @DeleteMapping("{id}/remover-companheiro")
     public ResponseEntity<Void> removerCompanheiro(@PathVariable Long id){
         guildaService.removerCompanheiro(id);
         return ResponseEntity.noContent().build();
