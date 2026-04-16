@@ -93,19 +93,19 @@ public class AventureiroController {
     @PatchMapping("{id}/encerrar")
     public ResponseEntity<Void> encerrar(@PathVariable Long id){
         guildaService.encerrarVinculoComAGuilda(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("{id}/recrutar")
     public ResponseEntity<Void> recrutar(@PathVariable Long id){
         guildaService.recrutarNovamente(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("{id}/remover-companheiro")
     public ResponseEntity<Void> removerCompanheiro(@PathVariable Long id){
         guildaService.removerCompanheiro(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{id}")
@@ -114,6 +114,6 @@ public class AventureiroController {
             @Valid @RequestBody AventureiroUpdateDTO dto
     ) {
         guildaService.atualizarAventureiro(id, dto);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }
