@@ -1,0 +1,24 @@
+Banco
+Como inserir dados nas tabelas aventureiros, companheiros etc
+
+Qual a diferenca de uso real:
+
+spring:
+  sql:
+    init:
+      mode: always
+
+spring:
+  jpa:
+    defer-datasource-initialization: true
+
+
+Usei o data.sql porem se eu quiser colocar outro nome de arquivo e fazer varios arquivos
+
+Solucao GPT: spring.sql.init.data-locations=classpath:data.sql,classpath:outros-dados.sql
+
+			spring.sql.init.data-locations=classpath:db/data/*.sql
+
+
+Escalar
+Thymeleaf Com BootStrap ?
