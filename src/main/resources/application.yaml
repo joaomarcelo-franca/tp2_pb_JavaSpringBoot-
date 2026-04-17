@@ -9,8 +9,19 @@ spring:
     hibernate:
       ddl-auto: validate
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    Area de Procducap
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+#
   main:
     allow-bean-definition-overriding: true
+  sql:
+    init:
+      mode: always
+
+
 
   elasticsearch:
     uris: http://localhost:9200
