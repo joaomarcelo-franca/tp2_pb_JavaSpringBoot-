@@ -18,6 +18,7 @@ import com.example.TP2_Guilda.model.aventura.Aventureiro;
 import com.example.TP2_Guilda.model.aventura.Companheiro;
 import com.example.TP2_Guilda.model.aventura.Participacao;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -35,6 +37,11 @@ public class GuildaService {
     private final AventureiroRespository aventureiroRespository;
     private final ParticipacaoRepository participacaoRepository;
 
+    public List<AventureiroResumoDTO> getAll() {
+        List<Aventureiro> all = aventureiroRespository.findAllByOrderByIdAsc();
+        return all.stream().map(AventureiroMapper::toAventureiroResumoDTO).toList();
+
+    }
 
     //    TODO Listagem de Aventureiros com Filtros
     public Page<AventureiroResumoDTO> listarAventureiroComFiltro(AventureiroFiltroRequestDTO filtro, Pageable pageable) {
@@ -68,7 +75,7 @@ public class GuildaService {
 
         MissaoResponseResumoDTO ultimaMissao = ultimaParticipacao != null ? MissaoMapper.toMissaoResponseResumoDTO(ultimaParticipacao.getMissao()) : null;
 
-        OrganizacaoResumoDTO organizacaoResumoDTO = OrganizationMapper.toOrganizacaoResumoDTO(aventureiro.getOrganizacao(), aventureiro.getCriadoEm());
+        OrganizacaoResumoDTO organizacaoResumoDTO = OrganizationMapper.toOrganizacaoResumoDTO(aventureiro.getOrganizacao());
 
         CompanheiroResponseDTO companheiroResponseDTO = aventureiro.getCompanheiro() != null ? CompanheiroMapper.toCompanheiroResponseDTO(aventureiro.getCompanheiro()) : null;
 
@@ -163,21 +170,22 @@ public class GuildaService {
         Aventureiro aventureiro = aventureiroRespository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoLocalizada("Aventureiro não encontrado"));
 
-        if (dto.nome() != null) {
-            aventureiro.setNome(dto.nome());
-        }
+        dto.atualizarEntidade(aventureiro);
+    }
 
-        if (dto.nivel() != null) {
-            aventureiro.setNivel(dto.nivel());
-        }
+    @Transactional
+    public void atualizarCompanheiro(Long id, @Valid CompanheiroCreateDTO dto) {
+        Companheiro byId = companheiroRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Companheiro nao localizado"));
 
-        if (dto.classe() != null) {
-            aventureiro.setClasse(dto.classe());
-        }
-
-
+        dto.atualizarCompanheiro(byId);
     }
 
 
+    public CompanheiroResponseDTO findById(Long id) {
+        Companheiro byId = companheiroRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Companheiro nao localizado"));
 
+        return CompanheiroMapper.toCompanheiroResponseDTO(byId);
+    }
 }

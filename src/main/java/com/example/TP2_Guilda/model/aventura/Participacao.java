@@ -55,4 +55,5 @@ public class Participacao {
         this.mvp = mvp;
         this.criadoEm = LocalDateTime.now();
     }
+
 }

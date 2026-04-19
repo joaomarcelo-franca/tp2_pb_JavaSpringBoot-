@@ -36,6 +36,7 @@ public interface AventureiroRespository extends JpaRepository<Aventureiro, Long>
 
     Page<AventureiroResumoDTO> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
 
+    List<Aventureiro> findAllByOrderByIdAsc();
 
     @EntityGraph(value = "Aventureiro.completo")
     Optional<Aventureiro> findById(Long id);
@@ -58,6 +59,8 @@ public interface AventureiroRespository extends JpaRepository<Aventureiro, Long>
             @Param("dataInicio")LocalDateTime dataInicio,
             @Param("status")Status status);
 
+
+    Pageable id(Long id);
 
 
 }

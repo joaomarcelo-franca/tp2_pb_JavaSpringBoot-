@@ -52,7 +52,7 @@ public class MissaoController {
                 .body(page.getContent());
     };
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<MissaoResponseDetalharDTO> buscarMissaoPorIdCompleto(@PathVariable Long id){
         return ResponseEntity.ok().body(missaoService.listarMissaoCompleta(id));
     };
@@ -64,9 +64,29 @@ public class MissaoController {
         return ResponseEntity.ok().body(missaoService.listarMissaoMetricas(date));
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> atualizarMissaoPorId(@PathVariable Long id,@Valid @RequestBody MissaoCreateDTO dto){
+        missaoService.atualizarMissao(id, dto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/participacao/{id}")
+    public ResponseEntity<Void> atualizarParticipacaoPorId(@PathVariable Long id,@Valid @RequestBody ParticipacaoRequestDTO dto){
+        missaoService.atualizarParticipacao(id, dto);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removerMissao(@PathVariable Long id){
         missaoService.removerMissao(id);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/participacao/{id}")
+    public ResponseEntity<Void> removerParticipacaoPorId(@PathVariable Long id){
+        missaoService.removerParticipacao(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    
 }

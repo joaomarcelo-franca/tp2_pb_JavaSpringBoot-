@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 public class OrganizationMapper {
-    public static OrganizacaoResumoDTO toOrganizacaoResumoDTO(Organizacao organizacao, LocalDateTime criadoEm) {
+    public static OrganizacaoResumoDTO toOrganizacaoResumoDTO(Organizacao organizacao) {
         return new OrganizacaoResumoDTO(
                 organizacao.getId(),
                 organizacao.getNome(),
                 organizacao.isAtivo(),
-                criadoEm
+                organizacao.getCriadoEm()
         );
     }
 }

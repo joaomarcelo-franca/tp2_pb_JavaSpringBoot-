@@ -85,6 +85,10 @@ public class Aventureiro {
         this.atualizadoEm = LocalDateTime.now();
     }
 
+    public void removerParticipacao(Participacao byId) {
+        this.participacoes.remove(byId);
+        byId.setAventureiro(null);
+    }
 }
 
 

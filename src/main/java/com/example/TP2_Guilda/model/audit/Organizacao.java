@@ -53,4 +53,11 @@ public class Organizacao {
     @OneToMany(mappedBy = "organizacao")
     private List<Missao> missoes;
 
+
+//    HELPERS
+
+    public void removerMissao(Missao missao) {
+        this.missoes.remove(missao);
+        missao.setOrganizacao(null);
+    };
 }

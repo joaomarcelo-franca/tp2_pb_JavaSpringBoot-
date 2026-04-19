@@ -70,4 +70,9 @@ public class Missao {
     }
 
     protected Missao() {}
+
+    public void removerParticipacao(Participacao byId) {
+        this.participacoes.remove(byId);
+        byId.setMissao(null);
+    }
 }

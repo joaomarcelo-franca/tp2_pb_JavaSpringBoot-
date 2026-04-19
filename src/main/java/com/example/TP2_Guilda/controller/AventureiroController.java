@@ -4,7 +4,8 @@ import com.example.TP2_Guilda.dto.aventureiro.*;
 import com.example.TP2_Guilda.dto.companheiro.CompanheiroCreateDTO;
 import com.example.TP2_Guilda.dto.companheiro.CompanheiroResponseDTO;
 import com.example.TP2_Guilda.Enum.Status;
-import com.example.TP2_Guilda.model.aventura.Companheiro;
+import com.example.TP2_Guilda.model.aventura.Aventureiro;
+import com.example.TP2_Guilda.repositorys.AventureiroRespository;
 import com.example.TP2_Guilda.repositorys.CompanheiroRepository;
 import com.example.TP2_Guilda.service.GuildaService;
 import jakarta.validation.Valid;
@@ -22,27 +23,18 @@ import java.util.List;
 
 @RequiredArgsConstructor
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/aventureiros")
 @Validated
 public class AventureiroController {
     private final GuildaService guildaService;
-    private final CompanheiroRepository companheiroRepository;
 
-    @PostMapping
-    public ResponseEntity<AventureiroResumoDTO> registrarAventureiro(@RequestBody @Valid AventureiroCreateDTO dto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(guildaService.registrar(dto));
-    }
+    // TODO Metodos GET
 
-    @PostMapping("/{id}/companheiro")
-    public ResponseEntity<CompanheiroResponseDTO> registrarCompanheiro(@PathVariable Long id, @RequestBody @Valid CompanheiroCreateDTO dto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(guildaService.registrarCompanheiro(id, dto));
-    }
-
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> removerAventureiro(@PathVariable Long id){
-       guildaService.removerAventureiro(id);
-       return ResponseEntity.noContent().build();
+    @GetMapping
+    public ResponseEntity<List<AventureiroResumoDTO>> getAllAventureiros() {
+        return ResponseEntity.ok().body(guildaService.getAll());
     }
 
     @GetMapping("/filtrado")
@@ -86,9 +78,28 @@ public class AventureiroController {
     public ResponseEntity<List<RakingAventureiroDTO>>  buscarRanking(
             @RequestParam(required = false)LocalDateTime data,
             @RequestParam(required = false) Status status
-            ){
-            return ResponseEntity.ok().body(guildaService.gerarRanking(data , status));
+    ){
+        return ResponseEntity.ok().body(guildaService.gerarRanking(data , status));
     };
+
+    @GetMapping("/companheiros/{id}")
+    public ResponseEntity<CompanheiroResponseDTO> buscarCompanheiroPorId(@PathVariable Long id){
+        return ResponseEntity.ok().body( guildaService.findById(id));
+    }
+
+//   TODO POST
+    @PostMapping
+    public ResponseEntity<AventureiroResumoDTO> registrarAventureiro(@RequestBody @Valid AventureiroCreateDTO dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(guildaService.registrar(dto));
+    }
+
+
+    @PostMapping("/{id}/companheiro")
+    public ResponseEntity<CompanheiroResponseDTO> registrarCompanheiro(@PathVariable Long id, @RequestBody @Valid CompanheiroCreateDTO dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(guildaService.registrarCompanheiro(id, dto));
+    }
+
+//   TODO  PATCH
 
     @PatchMapping("{id}/encerrar")
     public ResponseEntity<Void> encerrar(@PathVariable Long id){
@@ -102,12 +113,6 @@ public class AventureiroController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("{id}/remover-companheiro")
-    public ResponseEntity<Void> removerCompanheiro(@PathVariable Long id){
-        guildaService.removerCompanheiro(id);
-        return ResponseEntity.ok().build();
-    }
-
     @PatchMapping("/{id}")
     public ResponseEntity<Void> atualizar(
             @PathVariable Long id,
@@ -116,4 +121,25 @@ public class AventureiroController {
         guildaService.atualizarAventureiro(id, dto);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/companheiro/{id}")
+    public ResponseEntity<Void> atualizarCompanheiro(@PathVariable Long id, @Valid @RequestBody CompanheiroCreateDTO dto){
+        guildaService.atualizarCompanheiro(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+//  TODO  Delete
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> removerAventureiro(@PathVariable Long id){
+       guildaService.removerAventureiro(id);
+       return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("{id}/remover-companheiro")
+    public ResponseEntity<Void> removerCompanheiro(@PathVariable Long id){
+        guildaService.removerCompanheiro(id);
+        return ResponseEntity.ok().build();
+    }
+
+
 }

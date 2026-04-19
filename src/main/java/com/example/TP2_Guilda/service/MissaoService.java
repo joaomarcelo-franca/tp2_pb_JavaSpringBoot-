@@ -23,6 +23,8 @@ import com.example.TP2_Guilda.model.audit.Organizacao;
 import com.example.TP2_Guilda.model.aventura.Aventureiro;
 import com.example.TP2_Guilda.model.aventura.Missao;
 import com.example.TP2_Guilda.model.aventura.Participacao;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +54,10 @@ public class MissaoService {
                 dto.status()
         );
 
+//      TODO Ha necessidade de um metodo helper aqui, Em POST  ??
         organizacao.getMissoes().add(missao);
+
+
         missaoRepository.save(missao);
 
         return MissaoMapper.toMissaoResponseResumoDTO(missao);
@@ -90,7 +95,7 @@ public class MissaoService {
 
         participacaoRepository.save(participacao);
 
-//      FIXME  Resumir esse abaixo com metodo
+//      TODO Ha necessidade de um metodo helper aqui, Em POST ??
         missao.getParticipacoes().add(participacao);
         aventureiro.getParticipacoes().add(participacao);
 
@@ -99,10 +104,18 @@ public class MissaoService {
     }
 
     public void removerMissao(Long missaoId) {
-        missaoRepository.findById(missaoId)
+        Missao missao = missaoRepository.findById(missaoId)
                 .orElseThrow(() -> new EntidadeNaoLocalizada("Missao nao foi localizada"));
+        missao.getOrganizacao().removerMissao(missao);
+        missaoRepository.delete(missao);
+    }
 
-        missaoRepository.deleteById(missaoId);
+    public void removerParticipacao(Long id) {
+        Participacao byId = participacaoRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Participacao nao encontrada"));
+        byId.getMissao().removerParticipacao(byId);
+        byId.getAventureiro().removerParticipacao(byId);
+        participacaoRepository.delete(byId);
     }
 
 //    TODO Listagem de Missões
@@ -117,30 +130,16 @@ public class MissaoService {
 
 //    TODO Detalhamento de Missao
     public MissaoResponseDetalharDTO listarMissaoCompleta(Long id){
-
         Missao missao = missaoRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoLocalizada("Missao não foi encontrado"));
 
         List<ParticipacaoResponse> participacoesDTO = missao.getParticipacoes()
                 .stream()
-                .map(participacao -> {
-                    AventureiroResumoDTO aventureiroResumoDTO = AventureiroMapper.toAventureiroResumoDTO(participacao.getAventureiro());
-                    return new ParticipacaoResponse(
-                            participacao.getId(),
-                            aventureiroResumoDTO,
-                            participacao.getFuncaoMissao(),
-                            participacao.getRecompensaOuro(),
-                            participacao.isMvp()
-                    );
-                })
+                .map(participacao -> ParticipacaoMapper.toParticipacaoResponse(participacao, participacao.getAventureiro()))
                 .toList();
 
-
-        OrganizacaoResumoDTO  organizacaoResumoDTO = OrganizationMapper.toOrganizacaoResumoDTO(missao.getOrganizacao(), missao.getCriandoEm());
-
+        OrganizacaoResumoDTO  organizacaoResumoDTO = OrganizationMapper.toOrganizacaoResumoDTO(missao.getOrganizacao());
         return MissaoMapper.toMissaoResponseDetalharDTO(missao, organizacaoResumoDTO, participacoesDTO);
-
-
     }
 
 //   TODO Relatório de Missões com Métricas
@@ -148,6 +147,17 @@ public class MissaoService {
         return missaoRepository.relatorioMetricaMissoes(dataInicio);
     }
 
+    @Transactional
+    public void atualizarMissao(Long id, @Valid MissaoCreateDTO dto) {
+        Missao missao = missaoRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Missao nao foi localizada"));
+        dto.atualizarEntidade(missao);
+    }
 
-
+    @Transactional
+    public void atualizarParticipacao(Long id, @Valid ParticipacaoRequestDTO dto) {
+        Participacao byId = participacaoRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Participacao nao encontrado"));
+        dto.atualizarEntidade(byId);
+    }
 }

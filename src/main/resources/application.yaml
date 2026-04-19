@@ -7,7 +7,7 @@ spring:
     password: 1234
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 #    Area de Procducap
     show-sql: true
@@ -19,7 +19,7 @@ spring:
     allow-bean-definition-overriding: true
   sql:
     init:
-      mode: always
+      mode: never
 
 
 
