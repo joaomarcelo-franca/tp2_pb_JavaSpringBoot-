@@ -62,6 +62,7 @@ public class GuildaService {
     //    TODO Visualização Completa do Aventureiro
     public AventureiroResponseDTO listarAventureiroCompletoPorId(Long id) {
 
+//      FIXME ANALISAR
 
         Aventureiro aventureiro = aventureiroRespository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoLocalizada("Aventureiro não foi encontrado"));
@@ -70,8 +71,6 @@ public class GuildaService {
 
         Participacao ultimaParticipacao = participacaoRepository.findFirstByAventureiroIdOrderByCriadoEmDesc(id)
                 .orElse(null);
-
-
 
         MissaoResponseResumoDTO ultimaMissao = ultimaParticipacao != null ? MissaoMapper.toMissaoResponseResumoDTO(ultimaParticipacao.getMissao()) : null;
 
@@ -111,19 +110,20 @@ public class GuildaService {
         return AventureiroMapper.toAventureiroResumoDTO(aventureiro);
 
     }
-//
+
     public void removerAventureiro(Long id){
         Aventureiro aventureiro = aventureiroRespository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoLocalizada("Aventureiro nao encontrado"));
-
+        aventureiro.getOrganizacao().removerAventureiro(aventureiro);
+        aventureiro.getUsuario().removerAventureiro(aventureiro);
         aventureiroRespository.delete(aventureiro);
     }
-
-
     //  Registrar companheiro
     public CompanheiroResponseDTO registrarCompanheiro(Long id, CompanheiroCreateDTO dto) {
         Aventureiro aventureiro = aventureiroRespository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoLocalizada("Aventureiro não encontrado"));
+
+//        FIXME Devo deixar isso aqui na service ou levar e criar um meotod na entidade
 
         if (aventureiro.getCompanheiro() != null) {
             throw new AventureiroJaPossuiCompanheiroException("Aventureiro ja tem um companheiro assinado");
@@ -162,7 +162,7 @@ public class GuildaService {
     public void removerCompanheiro(Long id){
         Aventureiro aventureiro = aventureiroRespository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoLocalizada("Aventureiro não encontrado"));
-        aventureiro.setCompanheiro(null);
+        aventureiro.removerCompanheiro();
     }
 
     @Transactional

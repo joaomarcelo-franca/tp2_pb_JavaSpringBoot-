@@ -1,6 +1,7 @@
 package com.example.TP2_Guilda.model.aventura;
 
 import com.example.TP2_Guilda.Enum.Classe;
+import com.example.TP2_Guilda.exceptions.EntidadeNaoLocalizada;
 import com.example.TP2_Guilda.model.audit.Organizacao;
 import com.example.TP2_Guilda.model.audit.Usuario;
 import jakarta.persistence.*;
@@ -13,6 +14,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter@Setter
@@ -88,6 +90,14 @@ public class Aventureiro {
     public void removerParticipacao(Participacao byId) {
         this.participacoes.remove(byId);
         byId.setAventureiro(null);
+    }
+
+    public void removerCompanheiro() {
+        Companheiro c = Optional.ofNullable(this.companheiro)
+                .orElseThrow(() -> new EntidadeNaoLocalizada("Aventureiro nao tem companheiro para remover"));
+
+        c.setAventureiro(null);
+        this.companheiro = null;
     }
 }
 

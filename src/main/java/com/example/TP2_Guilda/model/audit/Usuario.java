@@ -73,4 +73,9 @@ public class Usuario {
 
         this.userRoles.add(ur);
     }
+
+    public void removerAventureiro(Aventureiro aventureiro) {
+        this.aventureiros.remove(aventureiro);
+        aventureiro.setUsuario(null);
+    }
 }

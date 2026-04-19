@@ -60,4 +60,9 @@ public class Organizacao {
         this.missoes.remove(missao);
         missao.setOrganizacao(null);
     };
+
+    public void removerAventureiro(Aventureiro aventureiro) {
+        this.aventureiros.remove(aventureiro);
+        aventureiro.setOrganizacao(null);
+    }
 }
